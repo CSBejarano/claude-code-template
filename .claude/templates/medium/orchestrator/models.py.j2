@@ -1,0 +1,92 @@
+"""
+{{ project_name }} - Data Models
+
+Pydantic models for workflow management.
+"""
+
+from pydantic import BaseModel, Field
+from typing import List, Dict, Any, Optional
+from datetime import datetime
+
+
+class WorkflowIntent(BaseModel):
+    """
+    User intent for workflow execution.
+    """
+    user_input: str = Field(..., description="Original user input")
+    goal: str = Field(..., description="Extracted goal/objective")
+    steps: List[str] = Field(default_factory=list, description="Workflow steps")
+    context: Dict[str, Any] = Field(default_factory=dict, description="Additional context")
+    timestamp: datetime = Field(default_factory=datetime.now)
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "user_input": "{{ goal }}",
+                "goal": "{{ goal }}",
+                "steps": [],
+                "context": {}
+            }
+        }
+
+
+class WorkflowResult(BaseModel):
+    """
+    Result from workflow execution.
+    """
+    success: bool = Field(..., description="Whether execution succeeded")
+    message: str = Field(..., description="Human-readable message")
+    data: Optional[Dict[str, Any]] = Field(None, description="Result data")
+    error: Optional[str] = Field(None, description="Error message if failed")
+    timestamp: datetime = Field(default_factory=datetime.now)
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "success": True,
+                "message": "Workflow completed successfully",
+                "data": {"status": "complete"},
+                "error": None
+            }
+        }
+
+
+{% if apis %}
+{% for api in apis %}
+class {{ api.name|replace(' ', '') }}Config(BaseModel):
+    """
+    Configuration for {{ api.name }} API.
+    """
+    api_key: str = Field(..., description="{{ api.name }} API key")
+    {% if api.auth_type == 'OAuth2' %}
+    client_id: Optional[str] = Field(None, description="OAuth2 client ID")
+    client_secret: Optional[str] = Field(None, description="OAuth2 client secret")
+    redirect_uri: Optional[str] = Field(None, description="OAuth2 redirect URI")
+    {% endif %}
+    timeout: int = Field(30, description="Request timeout in seconds")
+
+{% endfor %}
+{% endif %}
+
+
+class MemoryEntry(BaseModel):
+    """
+    Entry in persistent memory.
+    """
+    id: str = Field(..., description="Unique identifier")
+    type: str = Field(..., description="Type of memory (execution, decision, pattern)")
+    content: Dict[str, Any] = Field(..., description="Memory content")
+    relevance_score: float = Field(1.0, description="Relevance score (0-1)")
+    timestamp: datetime = Field(default_factory=datetime.now)
+    tags: List[str] = Field(default_factory=list, description="Tags for categorization")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "id": "mem_123",
+                "type": "execution",
+                "content": {"workflow": "example"},
+                "relevance_score": 1.0,
+                "tags": ["success", "{{ project_name }}"]
+            }
+        }

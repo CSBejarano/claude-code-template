@@ -1,0 +1,310 @@
+# PLANNING.md - {{ project_name }}
+
+> **Arquitectura y planificación técnica** del proyecto
+
+---
+
+## 🎯 **Visión General**
+
+### **Objetivo del Proyecto**
+
+{{ goal }}
+
+**Resultado esperado**: {{ output_description|default("Automated workflow with reliable execution") }}
+
+### **Alcance**
+
+**✅ In-Scope:**
+{% if workflow_steps %}
+{% for step in workflow_steps %}
+- {{ step }}
+{% endfor %}
+{% else %}
+- Core automation workflow
+- API integrations
+- Error handling and logging
+- Testing and validation
+{% endif %}
+
+**❌ Out-of-Scope:**
+_(To be defined during development)_
+
+---
+
+## 🏗️ **Arquitectura**
+
+### **Nivel de Complejidad**: {{ complexity|capitalize }}
+
+{% if complexity == 'simple' %}
+**Simple Architecture** - Direct workflow:
+
+```
+Input → Process → API Calls → Output
+```
+
+**Características**:
+- Flujo lineal directo
+- 1-2 API integrations
+- Sin orchestration layer
+- Configuración simple
+
+{% elif complexity == 'medium' %}
+**Medium Complexity** - Orchestrated workflow:
+
+```
+Input
+  ↓
+Orchestrator
+  ├─ Intent Analysis
+  ├─ Workflow Planning
+  └─ Execution
+      ↓
+  API Integrations ({{ apis|length }})
+      ↓
+  Output + Memory
+```
+
+**Características**:
+- Orchestrator manages workflow
+- 3-5 API integrations
+- Memory system for learning
+- Modular architecture
+
+{% elif complexity == 'high' %}
+**High Complexity** - Advanced orchestration + Self-improvement:
+
+```
+Input
+  ↓
+Orchestrator + Subagents
+  ├─ Intent Analysis (Pydantic)
+  ├─ Memory Context
+  ├─ Subagent Coordination
+  └─ Workflow Execution
+      ↓
+  API Integrations ({{ apis|length }}+)
+      ↓
+  Output + Learning
+      ↓
+  @self-improve Agent
+  (Continuous optimization)
+```
+
+**Características**:
+- Advanced orchestration
+- 5+ API integrations
+- Specialized subagents
+- Self-improvement capabilities
+- Comprehensive memory system
+{% endif %}
+
+---
+
+## 🧩 **Componentes Principales**
+
+{% if complexity == 'simple' %}
+### **Componente 1: Main Application**
+**Responsabilidad:** Entry point and workflow execution
+
+**Archivos:**
+{% if 'Python' in tech_stack %}
+- `src/main.py` - Main entry point
+{% elif 'Node.js' in tech_stack %}
+- `src/index.js` - Main entry point
+{% endif %}
+
+### **Componente 2: API Integrations**
+**Responsabilidad:** External API communication
+
+**Archivos:**
+{% for api in apis %}
+{% if 'Python' in tech_stack %}
+- `src/integrations/{{ api.name|lower|replace(' ', '_') }}.py`
+{% elif 'Node.js' in tech_stack %}
+- `src/integrations/{{ api.name|lower|replace(' ', '_') }}.js`
+{% endif %}
+{% endfor %}
+
+### **Componente 3: Utilities**
+**Responsabilidad:** Helper functions and common utilities
+
+**Archivos:**
+{% if 'Python' in tech_stack %}
+- `src/utils/validators.py`
+- `src/utils/formatters.py`
+{% elif 'Node.js' in tech_stack %}
+- `src/utils/validators.js`
+- `src/utils/formatters.js`
+{% endif %}
+
+{% elif complexity in ['medium', 'high'] %}
+### **Componente 1: Orchestrator**
+**Responsabilidad:** Workflow management and coordination
+
+**Archivos:**
+{% if 'Python' in tech_stack %}
+- `src/orchestrator/agent.py` - Main orchestrator
+- `src/orchestrator/models.py` - Pydantic models
+- `src/orchestrator/memory.py` - Memory system
+{% elif 'Node.js' in tech_stack %}
+- `src/orchestrator/agent.js` - Main orchestrator
+- `src/orchestrator/models.js` - Data models
+- `src/orchestrator/memory.js` - Memory system
+{% endif %}
+
+### **Componente 2: API Integrations**
+**Responsabilidad:** External API communication
+
+**Features:**
+{% for api in apis %}
+- {{ api.name }}: {{ api.description }}
+{% endfor %}
+
+{% if complexity == 'high' %}
+### **Componente 3: Specialized Subagents**
+**Responsabilidad:** Specific task execution
+
+**Subagents:**
+{% for agent in suggested_agents %}
+- {{ agent }}
+{% endfor %}
+
+### **Componente 4: Self-Improvement System**
+**Responsabilidad:** Continuous optimization
+
+**Features:**
+- Performance monitoring
+- Pattern detection
+- Automatic optimization suggestions
+- Memory-based learning
+{% endif %}
+{% endif %}
+
+---
+
+## 🔄 **Flujo de Trabajo**
+
+### **End-to-End Flow**
+
+1. **Input Reception**
+   - {{ input_description|default("User input or scheduled trigger") }}
+
+{% if workflow_steps %}
+{% for step in workflow_steps %}
+{{ loop.index + 1 }}. **{{ step }}**
+{% endfor %}
+{% else %}
+2. **Data Validation**
+   - Validate input format
+   - Check required fields
+
+3. **Processing**
+   - Transform data
+   - Apply business logic
+
+4. **API Interactions**
+   {% for api in apis %}
+   - {{ api.name }}: {{ api.description }}
+   {% endfor %}
+
+5. **Output Generation**
+   - Format results
+   - Store in destination
+{% endif %}
+
+---
+
+## 🧠 **Data Models**
+
+{% if 'Python' in tech_stack %}
+```python
+from pydantic import BaseModel
+from typing import List, Optional
+
+class InputModel(BaseModel):
+    """Input data structure"""
+    # Define fields based on your needs
+    pass
+
+class OutputModel(BaseModel):
+    """Output data structure"""
+    # Define fields based on your needs
+    pass
+```
+{% elif 'Node.js' in tech_stack %}
+```javascript
+// Input data structure
+interface InputModel {
+    // Define fields based on your needs
+}
+
+// Output data structure
+interface OutputModel {
+    // Define fields based on your needs
+}
+```
+{% endif %}
+
+---
+
+## 🤔 **Decisiones de Diseño**
+
+### **Decisión 1: [To be documented]**
+
+**Contexto:**
+_(Describe the problem or choice)_
+
+**Opciones Consideradas:**
+1. Option A: ...
+2. Option B: ...
+
+**Decisión Tomada:**
+_(Which option was chosen and why)_
+
+**Consecuencias:**
+- **Positivas**: ...
+- **Negativas**: ...
+
+---
+
+## 🗺️ **Roadmap**
+
+### **Fase 1: Setup** (Current)
+- [x] Project structure
+- [x] Basic configuration
+- [ ] API client setup
+
+### **Fase 2: Core Implementation**
+- [ ] Main workflow
+- [ ] Error handling
+- [ ] Logging
+
+### **Fase 3: Testing**
+- [ ] Unit tests (TDD)
+- [ ] Integration tests
+- [ ] E2E tests
+
+### **Fase 4: Optimization**
+- [ ] Performance tuning
+- [ ] Documentation
+- [ ] Deployment prep
+
+---
+
+## 📊 **Tech Stack**
+
+{% for tech in tech_stack %}
+- **{{ tech }}**
+{% endfor %}
+
+**Dependencies:**
+{% if 'Python' in tech_stack %}
+- See `requirements.txt` for complete list
+{% elif 'Node.js' in tech_stack %}
+- See `package.json` for complete list
+{% endif %}
+
+---
+
+*Última actualización: {{ current_date }}*
+*Versión: {{ version|default("1.0.0") }}*

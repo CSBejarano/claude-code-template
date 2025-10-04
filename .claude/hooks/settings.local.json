@@ -1,0 +1,62 @@
+{
+  "hooks": {
+    "preToolUse": {
+      "enabled": false,
+      "command": "bash .claude/hooks/pre-tool-use.sh",
+      "blocking": true,
+      "description": "Se ejecuta antes de que Claude use una herramienta. Útil para validaciones."
+    },
+    "userPromptSubmit": {
+      "enabled": false,
+      "command": "bash .claude/hooks/prompt-submit.sh",
+      "blocking": false,
+      "description": "Se ejecuta cuando el usuario envía un mensaje. Útil para logging."
+    },
+    "postToolUse": {
+      "enabled": false,
+      "command": "bash .claude/hooks/post-tool-use.sh",
+      "blocking": false,
+      "description": "Se ejecuta después de que Claude use una herramienta. Útil para auto-format o tests."
+    }
+  },
+
+  "customInstructions": {
+    "enabled": true,
+    "instructions": [
+      "Siempre leer CLAUDE.md al inicio de una nueva conversación",
+      "Consultar TASK.md antes de iniciar una nueva tarea",
+      "Usar convenciones de nomenclatura del proyecto",
+      "Seguir patrones establecidos en el codebase"
+    ]
+  },
+
+  "agents": {
+    "codebase-analyst": {
+      "enabled": true,
+      "description": "Analiza patrones del código y arquitectura del proyecto"
+    },
+    "library-researcher": {
+      "enabled": true,
+      "description": "Investiga documentación de librerías externas"
+    }
+  },
+
+  "commands": {
+    "prp": {
+      "enabled": true,
+      "description": "Sistema PRP (Pattern Recognition Protocol) para crear e implementar features"
+    }
+  },
+
+  "preferences": {
+    "autoFormat": false,
+    "autoTest": false,
+    "verboseLogging": false
+  },
+
+  "notes": {
+    "lastUpdated": "[FECHA]",
+    "projectVersion": "[VERSION]",
+    "customizations": "Personaliza este archivo según las necesidades de tu proyecto"
+  }
+}

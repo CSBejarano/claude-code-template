@@ -1,0 +1,387 @@
+# CLAUDE.md - {{ project_name }}
+
+> **Documento maestro del proyecto** - Guía completa para Claude Code y desarrolladores
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
+
+## 📚 **Sistema de Documentación**
+
+```
+🚀 README.md               → Documentación principal
+📖 CLAUDE.md (ESTÁS AQUÍ)  → Documentación completa para Claude Code
+📋 .claude/PLANNING.md     → Arquitectura y planificación
+📋 .claude/TASK.md         → Tareas actuales y progreso
+```
+
+---
+
+## 🎯 **Misión del Proyecto**
+
+{{ goal }}
+
+### **Problema que Resolvemos**
+- **Entrada**: {{ input_description|default("Data from configured sources") }}
+- **Proceso**:
+  {% if workflow_steps %}
+  {% for step in workflow_steps %}
+  - {{ step }}
+  {% endfor %}
+  {% else %}
+  - Data collection
+  - Processing and transformation
+  - Output generation
+  {% endif %}
+- **Salida**: {{ output_description|default("Processed data in target format") }}
+
+### **Estado Actual del Sistema**
+
+**Progreso Actual:**
+- [x] Fase 1: Project setup - ✅ COMPLETADO
+- [ ] Fase 2: Core implementation - 🔄 EN PROGRESO
+- [ ] Fase 3: Testing and validation - 📋 PENDIENTE
+- [ ] Fase 4: Documentation and optimization - 📋 PENDIENTE
+
+**Complejidad**: {{ complexity|capitalize }}
+
+---
+
+## 🏗️ **Arquitectura del Sistema**
+
+{% if complexity == 'simple' %}
+**Arquitectura Simple** (Directa y sin complicaciones):
+
+```
+User Input
+    ↓
+{{ project_name }}
+    ↓
+{% for api in apis %}
+{{ api.name }} API
+    ↓
+{% endfor %}
+Output
+```
+
+**Componentes principales:**
+- Main application (src/main.py or src/index.js)
+- API integrations (src/integrations/)
+- Utilities (src/utils/)
+
+{% elif complexity == 'medium' %}
+**Arquitectura con Orchestrator** (Workflow management):
+
+```
+User Input
+    ↓
+Orchestrator Agent
+    ├─ Intent Analysis
+    ├─ Memory Context
+    └─ Workflow Execution
+        ↓
+    API Integrations
+    {% for api in apis %}
+    ├─ {{ api.name }}
+    {% endfor %}
+        ↓
+    Output
+```
+
+**Componentes principales:**
+- Orchestrator (src/orchestrator/agent.py)
+- Intent models (src/orchestrator/models.py)
+- Memory system (src/orchestrator/memory.py)
+- API integrations (src/integrations/)
+
+{% elif complexity == 'high' %}
+**Arquitectura Avanzada** (Self-improvement + Orchestration):
+
+```
+User Input
+    ↓
+Orchestrator Agent
+    ├─ Intent Analysis (Pydantic)
+    ├─ Memory Context (.claude/memories/)
+    ├─ Subagent Coordination
+    └─ Workflow Execution
+        ↓
+    Specialized Subagents
+    {% for agent in suggested_agents %}
+    ├─ {{ agent }}
+    {% endfor %}
+        ↓
+    API Integrations ({{ apis|length }})
+        ↓
+    Output + Learning
+        ↓
+    @self-improve Agent
+    (Continuous optimization)
+```
+
+**Componentes principales:**
+- Orchestrator (src/orchestrator/)
+- Specialized subagents (src/orchestrator/subagents/)
+- Self-improvement agent (.claude/agents/@self-improve.md)
+- Memory system with learning
+{% endif %}
+
+---
+
+## 📋 **Estructura del Proyecto**
+
+```
+{{ project_name }}/
+├── src/                   # Código fuente
+{% if 'Python' in tech_stack %}
+│   ├── main.py           # Entry point
+│   ├── integrations/     # API clients
+{% for api in apis %}
+│   │   ├── {{ api.name|lower|replace(' ', '_') }}.py
+{% endfor %}
+{% if complexity in ['medium', 'high'] %}
+│   ├── orchestrator/     # Orchestration layer
+│   │   ├── agent.py      # Main orchestrator
+│   │   ├── models.py     # Pydantic models
+│   │   └── memory.py     # Persistent memory
+{% endif %}
+│   └── utils/            # Utilities
+│
+├── tests/                # Tests (TDD approach)
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+├── .claude/              # Claude Code configuration
+│   ├── PLANNING.md
+│   ├── TASK.md
+│   └── agents/           # Specialized agents
+{% if complexity == 'high' %}
+│       └── @self-improve.md
+{% endif %}
+│
+├── config/               # Configuration
+├── requirements.txt      # Python dependencies
+{% elif 'Node.js' in tech_stack %}
+│   ├── index.js          # Entry point
+│   ├── integrations/     # API clients
+{% for api in apis %}
+│   │   ├── {{ api.name|lower|replace(' ', '_') }}.js
+{% endfor %}
+{% if complexity in ['medium', 'high'] %}
+│   ├── orchestrator/     # Orchestration layer
+│   │   ├── agent.js      # Main orchestrator
+│   │   ├── models.js     # Data models
+│   │   └── memory.js     # Persistent memory
+{% endif %}
+│   └── utils/            # Utilities
+│
+├── tests/                # Tests (TDD approach)
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+├── .claude/              # Claude Code configuration
+│   ├── PLANNING.md
+│   ├── TASK.md
+│   └── agents/           # Specialized agents
+{% if complexity == 'high' %}
+│       └── @self-improve.md
+{% endif %}
+│
+├── config/               # Configuration
+├── package.json          # Node dependencies
+{% endif %}
+└── README.md
+```
+
+---
+
+## 🛠️ **Comandos de Desarrollo**
+
+### **Configuración Inicial**
+```bash
+# Clonar repositorio
+git clone {{ repo_url|default("[repo-url]") }}
+cd {{ project_name }}
+
+# Instalar dependencias
+{% if 'Python' in tech_stack %}
+pip install -r requirements.txt
+
+# Configurar entorno
+cp .env.example .env
+# Editar .env con tus credenciales
+{% elif 'Node.js' in tech_stack %}
+npm install
+
+# Configurar entorno
+cp .env.example .env
+# Editar .env con tus credenciales
+{% endif %}
+```
+
+### **Comandos Principales**
+```bash
+# Desarrollo
+{% if 'Python' in tech_stack %}python src/main.py{% elif 'Node.js' in tech_stack %}npm run dev{% endif %}
+
+# Testing (TDD)
+{% if 'Python' in tech_stack %}pytest{% elif 'Node.js' in tech_stack %}npm test{% endif %}
+
+# Linting
+{% if 'Python' in tech_stack %}ruff check .{% elif 'Node.js' in tech_stack %}npm run lint{% endif %}
+
+# Type checking
+{% if 'Python' in tech_stack %}mypy src/{% elif 'Node.js' in tech_stack %}npm run typecheck{% endif %}
+```
+
+---
+
+## 🔧 **Variables de Entorno Requeridas**
+
+```bash
+{% if apis %}
+{% for api in apis %}
+# {{ api.name }} API
+{{ api.name|upper|replace(' ', '_') }}_API_KEY=your_api_key_here
+{% if api.auth_type == 'OAuth2' %}
+{{ api.name|upper|replace(' ', '_') }}_CLIENT_ID=your_client_id
+{{ api.name|upper|replace(' ', '_') }}_CLIENT_SECRET=your_client_secret
+{{ api.name|upper|replace(' ', '_') }}_REDIRECT_URI=http://localhost:3000/callback
+{% endif %}
+
+{% endfor %}
+{% endif %}
+# General
+LOG_LEVEL=INFO
+DEBUG=false
+```
+
+---
+
+## 🎯 **Principios de Desarrollo**
+
+### **Core Principles**
+
+1. **TDD Approach - MANDATORY**
+   - Write tests BEFORE implementation
+   - Tests define expected behavior
+   - Target: 100% coverage
+
+2. **Code Quality**
+   - Keep files under 500 lines
+   - One responsibility per module
+   - Clear, descriptive names
+   - Document complex logic
+
+3. **Error Handling**
+   - Fail fast with clear messages
+   - Use appropriate exception types
+   - Log errors with context
+   - Never silently ignore failures
+
+### **Development Workflow**
+
+```bash
+# 1. Write failing test
+{% if 'Python' in tech_stack %}
+# tests/test_feature.py
+def test_new_feature():
+    result = new_feature()
+    assert result == expected
+{% elif 'Node.js' in tech_stack %}
+// tests/feature.test.js
+test('new feature works', () => {
+    const result = newFeature();
+    expect(result).toBe(expected);
+});
+{% endif %}
+
+# 2. Run test (should fail)
+{% if 'Python' in tech_stack %}pytest tests/test_feature.py{% elif 'Node.js' in tech_stack %}npm test{% endif %}
+
+# 3. Implement feature
+# (write code in src/)
+
+# 4. Run test (should pass)
+{% if 'Python' in tech_stack %}pytest tests/test_feature.py{% elif 'Node.js' in tech_stack %}npm test{% endif %}
+
+# 5. Refactor if needed
+
+# 6. Commit
+git add .
+git commit -m "feat: add new feature with tests"
+```
+
+---
+
+## 🤖 **Agentes Disponibles**
+
+{% if suggested_agents %}
+{% for agent in suggested_agents %}
+### **{{ agent }}**
+See `.claude/agents/{{ agent }}.md` for details.
+
+{% endfor %}
+{% else %}
+### **@codebase-analyst**
+Analyze code patterns and conventions.
+
+### **@library-researcher**
+Research external libraries and documentation.
+{% endif %}
+
+{% if complexity == 'high' %}
+### **@self-improve**
+**SPECIAL**: This agent can improve the project itself.
+- Analyzes performance bottlenecks
+- Suggests architectural improvements
+- Optimizes code quality
+- See `.claude/agents/@self-improve.md`
+{% endif %}
+
+---
+
+## ⚠️ **Recordatorios Críticos**
+
+1. **TDD ES OBLIGATORIO** - Nunca escribir código antes que tests
+2. **API CREDENTIALS** - Nunca commitear credenciales en el código
+3. **ERROR HANDLING** - Siempre validar inputs de APIs externas
+{% if complexity in ['medium', 'high'] %}
+4. **MEMORY SYSTEM** - Usa `.claude/memories/` para aprendizaje persistente
+5. **ORCHESTRATOR** - Delega workflows complejos al orchestrator
+{% endif %}
+6. **COVERAGE** - Target 100% test coverage para nuevo código
+7. **DOCUMENTATION** - Actualiza README y PLANNING cuando cambies arquitectura
+
+---
+
+## 📊 **Métricas de Performance**
+
+| Métrica | Objetivo | Actual | Estado |
+|---------|----------|--------|--------|
+| Test Coverage | 100% | -- | 📋 |
+| Response Time | <500ms | -- | 📋 |
+{% if apis %}
+{% for api in apis %}
+| {{ api.name }} API Uptime | >99% | -- | 📋 |
+{% endfor %}
+{% endif %}
+
+---
+
+## 🐛 **Issues Resueltos y Lecciones Aprendidas**
+
+### **Decisiones Técnicas**
+_(Documentar aquí decisiones importantes a medida que avanza el proyecto)_
+
+### **Lecciones Aprendidas**
+_(Documentar aquí lecciones aprendidas durante el desarrollo)_
+
+---
+
+*Última actualización: {{ current_date }}*
+*Versión: {{ version|default("1.0.0") }}*
+*Estado: {{ status|default("Development") }}*
+*Generado con: Claude Code + Orchestrator Agent SDK Template*

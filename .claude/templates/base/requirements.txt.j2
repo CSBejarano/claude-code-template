@@ -1,0 +1,53 @@
+# {{ project_name }} - Python Dependencies
+# Generated: {{ current_date }}
+
+# Core dependencies
+{% if 'Python' in tech_stack %}
+python-dotenv==1.0.0
+pydantic==2.5.0
+{% endif %}
+
+# API integrations
+{% if apis %}
+{% for api in apis %}
+{% if 'Gmail' in api.name or 'Google' in api.name %}
+google-auth==2.25.2
+google-auth-oauthlib==1.2.0
+google-auth-httplib2==0.2.0
+google-api-python-client==2.110.0
+{% elif 'Notion' in api.name %}
+notion-client==2.2.1
+{% elif 'Slack' in api.name %}
+slack-sdk==3.26.1
+{% elif 'OpenAI' in api.name or 'GPT' in api.name %}
+openai==1.6.1
+{% elif 'Anthropic' in api.name or 'Claude' in api.name %}
+anthropic==0.8.1
+{% endif %}
+{% endfor %}
+{% endif %}
+
+# HTTP requests
+requests==2.31.0
+httpx==0.25.2
+
+# Utilities
+python-dateutil==2.8.2
+
+{% if complexity in ['medium', 'high'] %}
+# Orchestration (for medium/high complexity projects)
+asyncio==3.4.3
+{% endif %}
+
+# Testing (TDD approach)
+pytest==7.4.3
+pytest-cov==4.1.0
+pytest-asyncio==0.21.1
+
+# Code quality
+ruff==0.1.8
+mypy==1.7.1
+black==23.12.1
+
+# Logging
+loguru==0.7.2

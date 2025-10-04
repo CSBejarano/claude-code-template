@@ -1,0 +1,309 @@
+# {{ project_name }}
+
+> {{ goal }}
+
+[![Status](https://img.shields.io/badge/Status-Active-green.svg)](#)
+[![Tests](https://img.shields.io/badge/Tests-Passing-blue.svg)](#)
+
+---
+
+## 📋 **Overview**
+
+**Project Type**: {{ complexity|capitalize }} Complexity
+**Tech Stack**: {% for tech in tech_stack %}{{ tech }}{% if not loop.last %}, {% endif %}{% endfor %}
+
+### **Integrated APIs**
+{% if apis %}
+{% for api in apis %}
+- **{{ api.name }}**: {{ api.description }}
+  - Authentication: {{ api.auth_type }}
+  - Endpoints: {{ api.endpoints|length }} endpoints
+{% endfor %}
+{% else %}
+- No external APIs (self-contained project)
+{% endif %}
+
+---
+
+## 🎯 **What Does This Project Do?**
+
+{{ goal }}
+
+**Input**: {{ input_description|default("Data from configured sources") }}
+
+**Process**:
+{% if workflow_steps %}
+{% for step in workflow_steps %}
+{{ loop.index }}. {{ step }}
+{% endfor %}
+{% else %}
+1. Data collection from sources
+2. Processing and transformation
+3. Output to destination
+{% endif %}
+
+**Output**: {{ output_description|default("Processed data in target format") }}
+
+---
+
+## 🚀 **Quick Start**
+
+### Prerequisites
+
+- {% if 'Python' in tech_stack %}Python 3.10+{% elif 'Node.js' in tech_stack %}Node.js 18+{% else %}See installation instructions below{% endif %}
+{% if apis %}
+- API credentials for:
+{% for api in apis %}
+  - {{ api.name }} ({{ api.auth_type }})
+{% endfor %}
+{% endif %}
+
+### Installation
+
+```bash
+# 1. Clone repository
+git clone {{ repo_url|default("https://github.com/user/" + project_name) }}.git
+cd {{ project_name }}
+
+# 2. Install dependencies
+{% if 'Python' in tech_stack %}pip install -r requirements.txt{% elif 'Node.js' in tech_stack %}npm install{% else %}# See specific instructions{% endif %}
+
+# 3. Configure environment
+cp .env.example .env
+# Edit .env with your API credentials
+
+# 4. Run tests (TDD approach)
+{% if 'Python' in tech_stack %}pytest{% elif 'Node.js' in tech_stack %}npm test{% else %}# See test instructions{% endif %}
+
+# 5. Start the application
+{% if 'Python' in tech_stack %}python src/main.py{% elif 'Node.js' in tech_stack %}npm start{% else %}# See start instructions{% endif %}
+```
+
+---
+
+## 🏗️ **Architecture**
+
+**Complexity Level**: {{ complexity|capitalize }}
+
+{% if complexity == 'simple' %}
+This is a **simple** project with straightforward architecture:
+- Single-purpose automation
+- 1-2 API integrations
+- Direct workflow without orchestration
+
+```
+{{ project_name }}/
+├── src/
+│   ├── main.py          # Entry point
+│   ├── integrations/    # API clients
+│   └── utils/           # Helper functions
+├── tests/               # TDD test suite
+└── config/              # Configuration files
+```
+
+{% elif complexity == 'medium' %}
+This is a **medium complexity** project with orchestration capabilities:
+- Multiple API integrations (3-5)
+- Orchestrator for workflow management
+- Modular architecture
+
+```
+{{ project_name }}/
+├── src/
+│   ├── main.py          # Entry point
+│   ├── integrations/    # API clients
+│   ├── orchestrator/    # Workflow orchestration
+│   │   ├── agent.py     # Orchestrator agent
+│   │   ├── models.py    # Data models
+│   │   └── memory.py    # Persistent memory
+│   └── utils/           # Helper functions
+├── tests/               # TDD test suite
+└── config/              # Configuration files
+```
+
+{% elif complexity == 'high' %}
+This is a **high complexity** project with advanced capabilities:
+- 5+ API integrations
+- Advanced orchestration
+- Self-improvement capabilities
+
+```
+{{ project_name }}/
+├── src/
+│   ├── main.py          # Entry point
+│   ├── integrations/    # API clients
+│   ├── orchestrator/    # Workflow orchestration
+│   │   ├── agent.py     # Orchestrator agent
+│   │   ├── models.py    # Data models
+│   │   ├── memory.py    # Persistent memory
+│   │   └── subagents/   # Specialized agents
+│   └── utils/           # Helper functions
+├── .claude/
+│   └── agents/
+│       └── @self-improve.md  # Self-improvement agent
+├── tests/               # Comprehensive test suite
+└── config/              # Configuration files
+```
+{% endif %}
+
+---
+
+## 🧪 **Testing (TDD Approach)**
+
+This project follows **Test-Driven Development**:
+- ✅ Tests written BEFORE implementation
+- ✅ 100% coverage target
+- ✅ Tests define behavior
+
+### Run Tests
+
+```bash
+{% if 'Python' in tech_stack %}
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=term-missing
+
+# Run specific test file
+pytest tests/test_main.py -v
+{% elif 'Node.js' in tech_stack %}
+# Run all tests
+npm test
+
+# Run with coverage
+npm run test:coverage
+
+# Run specific test
+npm test -- tests/main.test.js
+{% endif %}
+```
+
+### Test Structure
+
+```
+tests/
+├── unit/           # Unit tests for individual functions
+├── integration/    # Integration tests for API interactions
+└── e2e/           # End-to-end workflow tests
+```
+
+---
+
+## 📊 **Configuration**
+
+### Environment Variables
+
+Create a `.env` file with:
+
+```bash
+{% if apis %}
+{% for api in apis %}
+# {{ api.name }} credentials
+{{ api.name|upper }}_API_KEY=your_{{ api.name }}_api_key
+{% if api.auth_type == 'OAuth2' %}
+{{ api.name|upper }}_CLIENT_ID=your_client_id
+{{ api.name|upper }}_CLIENT_SECRET=your_client_secret
+{% endif %}
+{% endfor %}
+{% else %}
+# Add your configuration variables here
+{% endif %}
+
+# General settings
+LOG_LEVEL=INFO
+DEBUG=false
+```
+
+---
+
+## 🤖 **Claude Code Integration**
+
+This project is optimized for Claude Code development.
+
+### Available Agents
+
+{% if suggested_agents %}
+{% for agent in suggested_agents %}
+- **{{ agent }}**: See `.claude/agents/{{ agent }}.md`
+{% endfor %}
+{% else %}
+- **@codebase-analyst**: Analyze code patterns and conventions
+- **@library-researcher**: Research external libraries
+{% endif %}
+
+### Development Workflow
+
+```bash
+# Use TDD approach
+1. Write failing test
+2. Implement feature
+3. Make test pass
+4. Refactor if needed
+
+# Check quality
+{% if 'Python' in tech_stack %}ruff check .{% elif 'Node.js' in tech_stack %}npm run lint{% endif %}
+
+# Run tests before commit
+{% if 'Python' in tech_stack %}pytest{% elif 'Node.js' in tech_stack %}npm test{% endif %}
+```
+
+---
+
+## 📖 **Documentation**
+
+- **[CLAUDE.md](./CLAUDE.md)**: Complete project documentation for Claude Code
+- **[PLANNING.md](./.claude/PLANNING.md)**: Architecture and technical planning
+- **[TASK.md](./.claude/TASK.md)**: Current tasks and progress
+
+---
+
+## 🛠️ **Development**
+
+### Commands
+
+```bash
+{% if 'Python' in tech_stack %}
+# Development
+python src/main.py
+
+# Linting
+ruff check .
+
+# Type checking
+mypy src/
+
+# Format code
+black src/
+{% elif 'Node.js' in tech_stack %}
+# Development
+npm run dev
+
+# Linting
+npm run lint
+
+# Format code
+npm run format
+
+# Build
+npm run build
+{% endif %}
+```
+
+---
+
+## 📝 **License**
+
+{{ license|default("MIT License") }}
+
+---
+
+**Generated with:**
+- **Claude Code Template**: v{{ template_version|default("3.0.0") }}
+- **Orchestrator Agent SDK**: v{{ orchestrator_sdk_version|default("1.0.0") }}
+- **Generated**: {{ current_date }}
+- **Project Version**: {{ version|default("1.0.0") }}
+
+---
+
+*Built with [Claude Code](https://claude.com/claude-code) 🚀*

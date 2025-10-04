@@ -1,0 +1,264 @@
+# ================================
+# Template .gitignore para Proyectos Claude Code
+# ================================
+
+# ================================
+# Archivos Sensibles y Credenciales
+# ================================
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p12
+credentials.json
+secrets.yaml
+config/secrets.yml
+
+# MCP configuration with API keys
+.mcp.json
+
+# ================================
+# Python
+# ================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+virtualenv/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# ================================
+# Node.js / JavaScript
+# ================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Next.js
+.next/
+out/
+
+# Nuxt.js
+.nuxt
+dist
+
+# Gatsby
+.cache/
+public
+
+# ================================
+# IDEs and Editors
+# ================================
+# VSCode
+.vscode/
+*.code-workspace
+.history/
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ================================
+# OS Generated
+# ================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ================================
+# Logs y Archivos Temporales
+# ================================
+*.log
+logs/
+*.out
+*.pid
+*.seed
+*.pid.lock
+temp/
+tmp/
+*.tmp
+
+# ================================
+# Archivos de Datos y Uploads
+# ================================
+uploads/
+data/
+*.csv
+*.xlsx
+*.xls
+*.db
+*.sqlite
+*.sqlite3
+
+# Excepciones: mantener archivos de ejemplo
+!examples/**/*.xlsx
+!examples/**/*.csv
+!test_data/**/*
+
+# ================================
+# Bases de Datos
+# ================================
+dump.rdb
+*.rdb
+*.dump
+postgresql/
+mysql/
+
+# ================================
+# Docker
+# ================================
+docker-compose.override.yml
+*.env.docker
+
+# ================================
+# CI/CD
+# ================================
+.github/workflows/*.local.yml
+.gitlab-ci.local.yml
+
+# ================================
+# Archivos de Build
+# ================================
+*.exe
+*.dll
+*.dylib
+*.so
+*.o
+*.a
+
+# ================================
+# Archivos de Backup
+# ================================
+*.bak
+*.backup
+*.swp
+*~.nib
+
+# ================================
+# Archivos de Sistema
+# ================================
+desktop.ini
+$RECYCLE.BIN/
+
+# ================================
+# Archivos de Desarrollo
+# ================================
+.scratch/
+.notes/
+TODO.local.md
+
+# ================================
+# Archivos Personales
+# ================================
+notes.md
+personal/

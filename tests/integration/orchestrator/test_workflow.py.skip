@@ -1,0 +1,410 @@
+"""
+Integration tests for the complete orchestration workflow.
+
+These tests verify end-to-end functionality of the orchestrator agent,
+including intent analysis, project generation, subagent delegation,
+and validation.
+
+Note: These tests are mocked since they don't require actual API calls
+to Claude. In production, you would test with a real ClaudeSDKClient.
+"""
+
+import pytest
+import tempfile
+import shutil
+from pathlib import Path
+from unittest.mock import Mock, AsyncMock, patch
+
+from orchestrator import (
+    OrchestratorAgent,
+    AutomationIntent,
+    ProjectStructure,
+    OrchestrationResult
+)
+from orchestrator.workflow import OrchestrationWorkflow
+from orchestrator.memory import MemoryManager
+
+
+@pytest.fixture
+def temp_dirs():
+    """Create temporary directories for testing."""
+    working_dir = Path(tempfile.mkdtemp())
+    memory_dir = Path(tempfile.mkdtemp())
+
+    yield working_dir, memory_dir
+
+    # Cleanup
+    shutil.rmtree(working_dir)
+    shutil.rmtree(memory_dir)
+
+
+@pytest.fixture
+def orchestrator(temp_dirs):
+    """Create OrchestratorAgent instance."""
+    working_dir, memory_dir = temp_dirs
+    return OrchestratorAgent(
+        working_dir=working_dir,
+        memory_dir=memory_dir
+    )
+
+
+@pytest.fixture
+def sample_intent():
+    """Create sample AutomationIntent."""
+    return AutomationIntent(
+        project_name="invoice-processor",
+        project_type="data_processing",
+        main_objective="Automate PDF invoice processing",
+        key_requirements=[
+            "Extract data from PDF invoices",
+            "Normalize data format",
+            "Store in database"
+        ],
+        required_integrations=["database", "pdf_library"],
+        required_agents=[
+            "requirements_analyst",
+            "code_generator",
+            "test_writer",
+            "documentation_writer",
+            "validator"
+        ],
+        complexity_level="medium",
+        estimated_duration="2-3 days"
+    )
+
+
+class TestOrchestrationWorkflow:
+    """Integration tests for OrchestrationWorkflow."""
+
+    @pytest.mark.asyncio
+    async def test_workflow_initialization(self, temp_dirs):
+        """Test workflow initialization."""
+        working_dir, memory_dir = temp_dirs
+        memory = MemoryManager(memory_dir)
+
+        workflow = OrchestrationWorkflow(
+            memory=memory,
+            working_dir=working_dir
+        )
+
+        assert workflow.memory == memory
+        assert workflow.working_dir == working_dir
+        assert workflow.client is None
+
+    @pytest.mark.asyncio
+    async def test_project_structure_generation(self, temp_dirs, sample_intent):
+        """Test generating project structure from intent."""
+        working_dir, memory_dir = temp_dirs
+        memory = MemoryManager(memory_dir)
+        workflow = OrchestrationWorkflow(memory, working_dir)
+
+        # Mock client
+        mock_client = AsyncMock()
+        mock_client.query = AsyncMock()
+        mock_client.receive_response = AsyncMock()
+        mock_client.receive_response.return_value = []
+
+        workflow.client = mock_client
+
+        # Generate structure
+        structure = await workflow._generate_project_structure(sample_intent)
+
+        assert structure.project_name == "invoice-processor"
+        assert structure.project_type == "data_processing"
+        assert "src" in structure.directories
+        assert "tests" in structure.directories
+        assert len(structure.agents) == 5
+
+    @pytest.mark.asyncio
+    async def test_intent_analysis(self, temp_dirs):
+        """Test analyzing user intent."""
+        working_dir, memory_dir = temp_dirs
+        memory = MemoryManager(memory_dir)
+        workflow = OrchestrationWorkflow(memory, working_dir)
+
+        # Mock client
+        mock_client = AsyncMock()
+        mock_client.query = AsyncMock()
+        mock_client.receive_response = AsyncMock()
+        mock_client.receive_response.return_value = []
+
+        workflow.client = mock_client
+
+        # Analyze intent
+        intent = await workflow._analyze_intent(
+            "Quiero automatizar el procesamiento de facturas PDF"
+        )
+
+        assert intent.project_name is not None
+        assert intent.project_type is not None
+        assert len(intent.key_requirements) > 0
+        assert len(intent.required_agents) > 0
+
+
+class TestOrchestratorAgent:
+    """Integration tests for OrchestratorAgent."""
+
+    @pytest.mark.asyncio
+    async def test_orchestrator_initialization(self, orchestrator):
+        """Test orchestrator initialization."""
+        assert orchestrator.working_dir is not None
+        assert orchestrator.memory is not None
+
+    @pytest.mark.asyncio
+    async def test_get_memory_context(self, orchestrator):
+        """Test getting memory context."""
+        # Store some memory
+        orchestrator.memory.store_architectural_decision(
+            decision="Use FastAPI for API automation",
+            context="Best performance"
+        )
+
+        context = orchestrator.get_memory_context("api_automation")
+
+        assert context != ""
+        # Context may or may not contain our decision depending on relevance filtering
+
+    @pytest.mark.asyncio
+    async def test_validate_project(self, orchestrator, temp_dirs):
+        """Test project validation."""
+        working_dir, _ = temp_dirs
+
+        # Create a minimal project
+        project_path = working_dir / "test-project"
+        project_path.mkdir()
+        (project_path / "README.md").write_text("# Test Project")
+        (project_path / "requirements.txt").write_text("pytest>=7.0.0")
+
+        # Mock client for validation
+        mock_client = AsyncMock()
+        mock_client.query = AsyncMock()
+        mock_client.receive_response = AsyncMock()
+        mock_client.receive_response.return_value = []
+
+        # Create workflow and set client
+        orchestrator.workflow = OrchestrationWorkflow(
+            memory=orchestrator.memory,
+            working_dir=working_dir,
+            client=mock_client
+        )
+
+        # Validate
+        result = await orchestrator.validate_project(project_path)
+
+        assert result.is_valid is not None
+        assert result.quality_score >= 0.0
+        assert result.quality_score <= 10.0
+
+
+class TestEndToEndScenarios:
+    """End-to-end integration test scenarios."""
+
+    @pytest.mark.asyncio
+    async def test_simple_automation_workflow(self, temp_dirs):
+        """Test complete workflow for simple automation."""
+        working_dir, memory_dir = temp_dirs
+
+        # Create orchestrator
+        orchestrator = OrchestratorAgent(
+            working_dir=working_dir,
+            memory_dir=memory_dir
+        )
+
+        # Mock ClaudeSDKClient
+        with patch('orchestrator.agent.ClaudeSDKClient') as mock_client_class:
+            # Setup mock
+            mock_client = AsyncMock()
+            mock_client.query = AsyncMock()
+            mock_client.receive_response = AsyncMock()
+            mock_client.receive_response.return_value = []
+
+            # Context manager support
+            mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+            mock_client.__aexit__ = AsyncMock(return_value=None)
+
+            mock_client_class.return_value = mock_client
+
+            # Execute orchestration
+            result = await orchestrator.create_automation(
+                "Crear una API simple para gestionar tareas"
+            )
+
+            # Verify result structure
+            assert isinstance(result, OrchestrationResult)
+            assert result.execution_time_seconds >= 0
+
+    @pytest.mark.asyncio
+    async def test_complex_automation_with_integrations(self, temp_dirs):
+        """Test workflow for complex automation with integrations."""
+        working_dir, memory_dir = temp_dirs
+
+        orchestrator = OrchestratorAgent(
+            working_dir=working_dir,
+            memory_dir=memory_dir
+        )
+
+        # Store some relevant patterns in memory
+        orchestrator.memory.store_pattern(
+            pattern_name="api_integration",
+            pattern_description="Use requests library for HTTP APIs"
+        )
+
+        orchestrator.memory.store_architectural_decision(
+            decision="Use SQLAlchemy for database operations",
+            context="Better ORM support"
+        )
+
+        with patch('orchestrator.agent.ClaudeSDKClient') as mock_client_class:
+            mock_client = AsyncMock()
+            mock_client.query = AsyncMock()
+            mock_client.receive_response = AsyncMock()
+            mock_client.receive_response.return_value = []
+
+            mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+            mock_client.__aexit__ = AsyncMock(return_value=None)
+
+            mock_client_class.return_value = mock_client
+
+            result = await orchestrator.create_automation(
+                user_request="Automatizar integracion con API de facturas y base de datos",
+                additional_context="Debe soportar multiples proveedores de API"
+            )
+
+            assert isinstance(result, OrchestrationResult)
+
+            # Memory should have more entries after orchestration
+            index = orchestrator.memory._load_index()
+            assert len(index) >= 2  # At least our 2 stored patterns
+
+
+class TestMemoryIntegration:
+    """Tests for memory integration in workflow."""
+
+    @pytest.mark.asyncio
+    async def test_memory_persistence_across_runs(self, temp_dirs):
+        """Test that memory persists across multiple orchestrations."""
+        working_dir, memory_dir = temp_dirs
+
+        # First orchestration
+        orchestrator1 = OrchestratorAgent(
+            working_dir=working_dir,
+            memory_dir=memory_dir
+        )
+
+        orchestrator1.memory.store_architectural_decision(
+            decision="Always use async/await for I/O operations"
+        )
+
+        # Second orchestration (new instance, same memory dir)
+        orchestrator2 = OrchestratorAgent(
+            working_dir=working_dir,
+            memory_dir=memory_dir
+        )
+
+        # Should have access to previous memory
+        memories = orchestrator2.memory.search_memories(
+            category="architectural_decision"
+        )
+
+        assert len(memories) >= 1
+        assert any("async/await" in m.value for m in memories)
+
+    @pytest.mark.asyncio
+    async def test_memory_learning_from_orchestration(self, temp_dirs):
+        """Test that orchestrator learns from each run."""
+        working_dir, memory_dir = temp_dirs
+
+        orchestrator = OrchestratorAgent(
+            working_dir=working_dir,
+            memory_dir=memory_dir
+        )
+
+        # Store initial memory count
+        initial_count = len(orchestrator.memory._load_index())
+
+        # Simulate storing decisions during orchestration
+        orchestrator.memory.store_architectural_decision(
+            decision="Use Pydantic for data validation"
+        )
+
+        orchestrator.memory.store_pattern(
+            pattern_name="error_handling",
+            pattern_description="Use custom exception classes"
+        )
+
+        # Memory should have grown
+        final_count = len(orchestrator.memory._load_index())
+        assert final_count > initial_count
+        assert final_count >= initial_count + 2
+
+
+class TestErrorHandling:
+    """Tests for error handling in integration scenarios."""
+
+    @pytest.mark.asyncio
+    async def test_graceful_error_handling(self, temp_dirs):
+        """Test that errors are handled gracefully."""
+        working_dir, memory_dir = temp_dirs
+
+        orchestrator = OrchestratorAgent(
+            working_dir=working_dir,
+            memory_dir=memory_dir
+        )
+
+        # Mock client that raises an error
+        with patch('orchestrator.agent.ClaudeSDKClient') as mock_client_class:
+            mock_client = AsyncMock()
+            mock_client.query = AsyncMock(side_effect=Exception("API Error"))
+
+            mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+            mock_client.__aexit__ = AsyncMock(return_value=None)
+
+            mock_client_class.return_value = mock_client
+
+            result = await orchestrator.create_automation(
+                "Test automation"
+            )
+
+            # Should return failed result, not raise exception
+            assert result.success is False
+            assert result.error is not None
+            assert "API Error" in result.error
+
+
+class TestConcurrency:
+    """Tests for concurrent execution."""
+
+    @pytest.mark.asyncio
+    async def test_parallel_subagent_execution(self, temp_dirs, sample_intent):
+        """Test that subagents can execute in parallel."""
+        working_dir, memory_dir = temp_dirs
+        memory = MemoryManager(memory_dir)
+        workflow = OrchestrationWorkflow(memory, working_dir)
+
+        # Mock client
+        mock_client = AsyncMock()
+        mock_client.query = AsyncMock()
+        mock_client.receive_response = AsyncMock()
+        mock_client.receive_response.return_value = []
+
+        workflow.client = mock_client
+
+        # Create mock project structure
+        structure = ProjectStructure(
+            project_name=sample_intent.project_name,
+            project_type=sample_intent.project_type,
+            directories=[],
+            files=[],
+            agents=[]
+        )
+
+        # Execute parallel subagents
+        results = await workflow._execute_subagents_parallel(
+            sample_intent,
+            structure
+        )
+
+        # Should have results for each subagent
+        assert isinstance(results, dict)
+        # Check that multiple agents were called
+        # (exact keys depend on implementation)

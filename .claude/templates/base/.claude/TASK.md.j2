@@ -1,0 +1,252 @@
+# TASK.md - {{ project_name }}
+
+> 📋 **Seguimiento de tareas y progreso del proyecto**
+
+---
+
+## 📅 **Estado del Proyecto - {{ current_date }}**
+
+### 🎯 **Estado General**
+
+**Progreso Actual: 10% Completo**
+
+**Versión:** {{ version|default("0.1.0") }}
+**Estado:** 🚧 Development
+
+**Resumen:**
+- ✅ **Completadas**: 1 tarea (Setup inicial)
+- 🔄 **En Progreso**: 0 tareas
+- 📋 **Pendientes**: Multiple tareas
+- 🎯 **Próximo**: Core implementation
+
+---
+
+### 🆕 **Actualizaciones Recientes**
+
+- ✅ Project structure created
+- ✅ Initial configuration
+- 📋 Próximo: API integrations setup
+
+---
+
+## ✅ **FASE 1: Setup Inicial - COMPLETADO**
+
+### **Estado:** ✅ 100% Completado
+
+**Implementación:**
+- [x] Estructura base del proyecto
+- [x] Configuración inicial
+- [x] Documentación base (README, CLAUDE, PLANNING)
+- [x] Git repository initialized
+
+**Archivos creados:**
+- `README.md` - Documentación principal
+- `CLAUDE.md` - Guía para Claude Code
+- `.claude/PLANNING.md` - Arquitectura
+- `.claude/TASK.md` - Este archivo
+{% if 'Python' in tech_stack %}
+- `requirements.txt` - Dependencies
+{% elif 'Node.js' in tech_stack %}
+- `package.json` - Dependencies
+{% endif %}
+
+**Resultado:**
+Proyecto base funcional con documentación completa.
+
+**Última actualización:** {{ current_date }}
+
+---
+
+## 🔄 **FASE 2: API Integrations - EN PROGRESO (0%)**
+
+### **Estado Actual**
+Preparando integración de APIs externas.
+
+### **APIs a Integrar**
+{% if apis %}
+{% for api in apis %}
+- [ ] **{{ api.name }}** ({{ api.auth_type }})
+  - Setup: {{ api.name|lower|replace(' ', '_') }}_client
+  - Auth: {{ api.auth_type }}
+  - Endpoints: {{ api.endpoints|length if api.endpoints else "TBD" }}
+{% endfor %}
+{% else %}
+- [ ] Define APIs needed for the project
+{% endif %}
+
+### **Tareas Pendientes**
+{% if apis %}
+{% for api in apis %}
+- [ ] Setup {{ api.name }} credentials
+- [ ] Implement {{ api.name }} client
+- [ ] Write tests for {{ api.name }} integration (TDD)
+{% endfor %}
+{% else %}
+- [ ] Identify required APIs
+- [ ] Setup API credentials
+- [ ] Implement API clients
+{% endif %}
+
+### **Próximos Pasos**
+1. Configure API credentials in `.env`
+2. Implement API clients with TDD approach
+3. Write integration tests
+
+**Tiempo estimado:** TBD
+
+---
+
+## 📋 **FASE 3: Core Implementation - PENDIENTE**
+
+### **Descripción**
+Implement main workflow logic.
+
+### **Prerrequisitos**
+- Depende de: [Fase 2: API Integrations](#fase-2-api-integrations)
+
+### **Tareas Planificadas**
+{% if workflow_steps %}
+{% for step in workflow_steps %}
+- [ ] {{ step }}
+{% endfor %}
+{% else %}
+- [ ] Define core workflow
+- [ ] Implement business logic
+- [ ] Add error handling
+- [ ] Implement logging
+{% endif %}
+
+**Prioridad:** Alta
+**Tiempo estimado:** TBD
+
+---
+
+## 📋 **FASE 4: Testing & Validation - PENDIENTE**
+
+### **Descripción**
+Comprehensive testing following TDD approach.
+
+### **Tareas Planificadas**
+- [ ] Unit tests (100% coverage target)
+- [ ] Integration tests (API interactions)
+- [ ] E2E tests (complete workflow)
+- [ ] Error scenario testing
+- [ ] Performance testing
+
+**Prioridad:** Alta
+**Tiempo estimado:** TBD
+
+---
+
+## 📊 **Progreso General del Proyecto**
+
+### **Estadísticas Actuales**
+- ✅ **Completadas**: 1 fase
+- 🔄 **En Progreso**: 1 fase
+- 📋 **Pendientes**: 2 fases
+- 📊 **Progreso Total**: 10%
+
+### **Progreso por Fase**
+
+```
+[████████████████████████] 100% - Fase 1: Setup ✅
+[░░░░░░░░░░░░░░░░░░░░░░░░]   0% - Fase 2: API Integrations 📋
+[░░░░░░░░░░░░░░░░░░░░░░░░]   0% - Fase 3: Core Implementation 📋
+[░░░░░░░░░░░░░░░░░░░░░░░░]   0% - Fase 4: Testing & Validation 📋
+```
+
+### **Métricas de Quality**
+
+| Métrica | Objetivo | Actual | Estado |
+|---------|----------|--------|--------|
+| Test Coverage | 100% | 0% | 📋 |
+| Linting | 0 errors | -- | 📋 |
+| Type Hints | 100% | -- | 📋 |
+{% if apis %}
+{% for api in apis %}
+| {{ api.name }} Integration | Working | Not started | 📋 |
+{% endfor %}
+{% endif %}
+
+---
+
+## 🐛 **Issues y Bugs**
+
+### **Bugs Activos**
+
+_(No issues yet - project just started)_
+
+---
+
+## 🎯 **Hitos y Objetivos**
+
+### **Hito 1: MVP Funcional**
+**Fecha objetivo:** TBD
+**Estado:** 📋 Pendiente
+
+**Criterios de Éxito:**
+{% if apis %}
+{% for api in apis %}
+- [ ] {{ api.name }} integration working
+{% endfor %}
+{% else %}
+- [ ] All API integrations working
+{% endif %}
+- [ ] Core workflow executes end-to-end
+- [ ] Tests passing (>80% coverage)
+- [ ] Basic error handling
+
+**Entregables:**
+- [ ] Working application
+- [ ] Test suite
+- [ ] Documentation
+
+---
+
+## 📝 **Notas y Decisiones**
+
+### **{{ current_date }} - Project Initialization**
+
+**Initial setup completed:**
+- Project structure created
+- Documentation established
+- Ready for development
+
+**Next steps:**
+- Setup API credentials
+- Implement first integration (TDD approach)
+
+---
+
+## 🔄 **Changelog**
+
+### **{{ current_date }} - Version {{ version|default("0.1.0") }}**
+
+**Añadido:**
+- Initial project structure
+- Base documentation (README, CLAUDE, PLANNING, TASK)
+- Configuration files
+
+**Estado:** 🚧 Initial development
+
+---
+
+## ⏭️ **Próximos Pasos Inmediatos**
+
+1. **[Prioridad Alta]** Setup API credentials
+   - **Responsable**: Developer
+   - **Fecha límite**: TBD
+
+2. **[Prioridad Alta]** Implement first API integration (TDD)
+   - **Responsable**: Developer
+   - **Fecha límite**: TBD
+
+3. **[Prioridad Media]** Write integration tests
+   - **Responsable**: Developer
+   - **Fecha límite**: TBD
+
+---
+
+*Última actualización: {{ current_date }}*
+*Responsable: Development Team*
+*Versión: {{ version|default("0.1.0") }}*
