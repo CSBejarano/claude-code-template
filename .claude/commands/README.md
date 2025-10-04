@@ -115,6 +115,36 @@ Esta carpeta contiene comandos personalizados que extienden las capacidades de C
 
 ---
 
+### **5. `/compact-context`** 📦
+
+**Propósito**: Compactar manualmente el contexto de la sesión actual para continuar en sesión nueva con context window limpio.
+
+**Cuándo usar**:
+- ✅ Context window > 50% y aún tienes trabajo pendiente
+- ✅ Sesión larga con muchas tool calls acumuladas
+- ✅ Cambio de fase (Research → Planning → Implementation)
+- ✅ Múltiples sub-agentes ejecutados
+- ✅ Antes de tarea compleja que necesitará mucho contexto
+
+**Qué hace**:
+- Analiza la sesión actual (archivos, decisiones, problemas)
+- Genera `.claude/CONTINUE_SESSION.md` con estado completo
+- Proporciona instrucciones para `/clear` y continuar
+- Preserva decisiones arquitectónicas y lecciones aprendidas
+- Incluye próximos pasos ejecutables con paths exactos
+
+**Ventajas sobre `/compact` automático**:
+- Control fino sobre qué información preservar
+- Estructura personalizable según necesidad
+- Incluye contexto de POR QUÉ se tomaron decisiones
+- Documenta errores y soluciones (aprendizajes)
+
+**Basado en**: BAML Context Engineering Best Practices (Episode #17)
+
+**Archivo**: [compact-context.md](./compact-context.md)
+
+---
+
 ## 🔄 Flujo de Trabajo Recomendado
 
 ### **Al Iniciar un Proyecto Nuevo**
@@ -207,6 +237,7 @@ Comando (Orquestador)
 | `/init-project` | Nuevo proyecto | 5-8 | Proyecto completo | 20-40 min |
 | `/prp-create` | Nueva feature | 2-3 | Plan implementación | 5-10 min |
 | `/story-create` | User story | 3-4 | PRP ejecutable | 5-10 min |
+| `/compact-context` | Context > 50% | 0 (análisis local) | Session backup .md | 1-2 min |
 
 ---
 
@@ -308,6 +339,7 @@ Para agregar un nuevo comando:
 
 ---
 
-**Última actualización**: 2025-01-02
-**Comandos disponibles**: 4
+**Última actualización**: 2025-01-04
+**Comandos disponibles**: 5
 **Sistema**: Orquestación de agentes con sequential thinking
+**Nuevo**: `/compact-context` - Context engineering basado en BAML best practices
