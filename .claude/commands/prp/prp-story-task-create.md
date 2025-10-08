@@ -24,6 +24,16 @@ Create detailed TODOs and spawn parallel subagents to analyze (use specialized s
 
 ## Analysis Process
 
+### Phase 0: Planning (NUEVO)
+
+**Use @task-planner** to structure the investigation:
+
+- Break down story analysis into clear phases
+- Identify what research is needed (codebase, external docs, patterns)
+- Create TodoList for systematic investigation
+- Plan parallel vs sequential research tasks
+- Determine which specialized agents to invoke
+
 ### Phase 1: Story Decomposition
 
 Analyze the story to determine:
@@ -108,6 +118,22 @@ For each task, design validation that:
 - Can run immediately after task completion
 - Provides clear pass/fail feedback
 - Uses project-specific commands discovered in analysis
+
+### Phase 6: PRP Validation (NUEVO)
+
+**Use @validation-gates** to validate the generated PRP:
+
+- Check PRP completeness (all required sections present)
+- Validate task descriptions are actionable
+- Verify validation commands are executable
+- Confirm external references are accessible
+- Test that context is sufficient for execution
+
+**If validation fails:**
+
+- Iterate on PRP improvements
+- Re-validate until passing
+- Never save an incomplete PRP
 
 ## Quality Criteria
 

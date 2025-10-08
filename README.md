@@ -11,19 +11,23 @@
 ## 📚 **Documentación**
 
 **Getting Started:**
+
 - 🚀 **[QUICK_START.md](./QUICK_START.md)** - Inicio rápido (10 min)
 - 📖 **[USER_GUIDE.md](./docs/USER_GUIDE.md)** - Guía completa del sistema (11 phases explicadas)
 
 **Development:**
+
 - 🏗️ **[PLANNING.md](./.claude/PLANNING.md)** - Arquitectura y planificación técnica
 - ✅ **[TASK.md](./.claude/TASK.md)** - Tareas y progreso actual
 - 🤝 **[CONTRIBUTING.md](./CONTRIBUTING.md)** - Guía para contribuidores
 
 **Optimization & Troubleshooting:**
+
 - ✨ **[BEST_PRACTICES.md](./docs/BEST_PRACTICES.md)** - Optimización y mejores prácticas
 - 🔧 **[TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** - Solución de 30 errores comunes
 
 **Reference:**
+
 - 📋 **[CLAUDE.md](./CLAUDE.md)** - Instrucciones completas del proyecto
 - 📝 **[TEMPLATES.md](./.claude/TEMPLATES.md)** - Sistema de templates Jinja2
 - 🔄 **[CHANGELOG.md](./CHANGELOG.md)** - Historial de versiones
@@ -33,14 +37,17 @@
 ## 🎯 ¿Qué hace este proyecto?
 
 Este template proporciona una **arquitectura híbrida de dos capas** que combina:
+
 - **@project-initializer** (UX Layer): Agente interactivo de Claude Code con experiencia guiada paso a paso
 - **Orchestrator Agent SDK** (Engine Layer): Motor Python con análisis estructurado, memoria persistente y validación automática
 
 **Entrada:**
+
 - Solicitud del usuario en lenguaje natural (ej: "Quiero automatizar el procesamiento de facturas PDF")
 - Contexto adicional opcional
 
 **Proceso (Arquitectura Híbrida con Context Engineering):**
+
 1. **Research Phase** → Análisis estructurado con orchestrator.analyze_intent()
 2. **✅ CHECKPOINT 1** → Human validation (ROI 100x - previene 1,000 líneas malas)
 3. **Planning Phase** → Plan de implementación completo con TDD
@@ -49,6 +56,7 @@ Este template proporciona una **arquitectura híbrida de dos capas** que combina
 6. **Self-Improvement** → Proyectos medium/high pueden auto-evolucionar con @self-improve
 
 **Salida:**
+
 - Proyecto completo con estructura de directorios
 - Código fuente implementado con **TDD approach** (tests primero)
 - Tests unitarios y de integración con **100% coverage**
@@ -58,6 +66,7 @@ Este template proporciona una **arquitectura híbrida de dos capas** que combina
 - **Memory learnings** almacenados para proyectos futuros
 
 **Beneficio:**
+
 - **Generación automática** de proyectos desde ideas en lenguaje natural
 - **Arquitectura híbrida probada**: @project-initializer + Orchestrator SDK
 - **TDD obligatorio**: Tests definen comportamiento, reducen review en 80%
@@ -72,6 +81,7 @@ Este template proporciona una **arquitectura híbrida de dos capas** que combina
 ## 🚀 Inicio Rápido
 
 ### Requisitos Previos
+
 - Python 3.10+
 - Claude API Key (obtener en [console.anthropic.com](https://console.anthropic.com))
 - Git
@@ -161,6 +171,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 ```
 
 **Flujo de Trabajo Mejorado (Context Engineering):**
+
 1. **User request** en lenguaje natural
 2. **Research** → orchestrator.analyze_intent() (Pydantic-validated)
 3. **✅ CHECKPOINT 1** → Human reviews research (2-5 min, ROI 100x)
@@ -172,6 +183,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 9. **Project Generated** with optional @self-improve agent
 
 **Por qué esta arquitectura:**
+
 - **@project-initializer**: Experiencia interactiva paso a paso, guía al usuario
 - **Orchestrator SDK**: Motor estructurado, memoria, validación automática
 - **Checkpoints**: Atrapan errores antes de desperdiciar tiempo de implementación
@@ -183,6 +195,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 ## ✨ Funcionalidades Principales
 
 ### 🎯 Arquitectura Híbrida @project-initializer + Orchestrator
+
 - ✅ **UX Layer**: @project-initializer con experiencia guiada interactiva
 - ✅ **Engine Layer**: Orchestrator SDK con análisis estructurado (Pydantic)
 - ✅ **Memoria compartida**: `.claude/memories/` sincronizada entre ambos
@@ -190,6 +203,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ **11 Phases**: From goal understanding → TDD implementation → self-improvement setup
 
 ### 📋 Sistema de Templates Jinja2 (M3)
+
 - ✅ **Modular templates**: base + medium + high complexity levels
 - ✅ **11 template files**: README, CLAUDE, PLANNING, TASK, PRP, orchestrator/, @self-improve
 - ✅ **Dynamic rendering**: Projects adapt based on complexity and APIs
@@ -199,6 +213,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ **Documented**: Complete guide in `.claude/TEMPLATES.md` (515 lines)
 
 ### 🔢 Sistema de Versionado Semántico (M4)
+
 - ✅ **Dual versioning**: Template v3.0.0 + SDK v1.0.0 (independent)
 - ✅ **Semantic versioning**: MAJOR.MINOR.PATCH format
 - ✅ **CHANGELOG.md**: Keep a Changelog format with version history
@@ -210,6 +225,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ **Deprecation policy**: 3-stage process (warning → grace → removal)
 
 ### 🔍 Context Engineering (BAML Best Practices)
+
 - ✅ **CHECKPOINT 1**: Human validation after Research (ROI 100x)
 - ✅ **CHECKPOINT 2**: Human validation after Planning (ROI 10-20x)
 - ✅ **Error Impact Hierarchy**: Research (1000 lines) > Plan (10-100) > Code (1)
@@ -218,6 +234,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ **High-leverage reviews**: Focus on research/planning, not code
 
 ### 🧪 Test-Driven Development (TDD) - MANDATORY
+
 - ✅ **Tests FIRST**: Define behavior before implementation
 - ✅ **5-Step TDD Loop**: Failing test → Setup → Implement → Passing test → Confirm
 - ✅ **100% Coverage**: All new features have tests
@@ -226,15 +243,74 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ **Realistic examples**: Tests use actual API responses and data formats
 
 ### 🤖 Sistema de Agentes Especializados
+
 - ✅ **@project-initializer**: Main orchestration agent (1365 lines)
 - ✅ **@library-researcher**: Research external libraries and docs
 - ✅ **@codebase-analyst**: Find patterns and conventions
+- ✅ **@prp-validator**: PRP quality gatekeeper with auto-improvement (NEW in v3.1.0)
 - ✅ **@self-improve** (generated): For medium/high complexity projects
 - ✅ 5 orchestrator subagents: requirements, code, tests, docs, validator
 - ✅ Ejecución paralela con sub-agents para eficiencia
 - ✅ Delegación automática basada en tipo de proyecto
 
+### 📋 Sistema PRP (Pattern Recognition Protocol)
+
+**What are PRPs?**
+PRPs are structured implementation plans that provide complete context for first-try success. They ensure code works correctly on the first attempt through:
+
+- Complete context (everything needed, nothing guessed)
+- Progressive validation (4-level gates catch errors early)
+- Pattern consistency (follow existing project approaches)
+
+**New in v3.1.0: @prp-validator Integration**
+
+All PRPs are now automatically validated before execution using Pareto 80-20 principle:
+
+- ✅ "Current vs Desired Structure" section (shows what changes)
+- ✅ Mixed references (external docs + internal examples)
+- ✅ Specific business logic (no vague terms)
+- ✅ Actionable steps (file paths included)
+
+**PRP Workflow (With Validation)**:
+
+```bash
+# Step 1: Create PRP (generates from user story or technical spec)
+/prp-create feature-name
+# OR
+/story-create "user story text"
+
+# Step 2: OPTIONAL - Validate before executing
+/prp-validate PRPs/feature.md
+# → Auto-improves PRP if needed
+# → Shows score and issues
+# → Saves backup
+
+# Step 3: Execute (validation happens automatically)
+/prp-execute PRPs/feature.md
+# → Validates FIRST (uses @prp-validator)
+# → If score ≥ 80/100: proceeds with execution
+# → If score < 80/100: auto-improves (max 3 loops)
+# → If stuck: asks for manual review
+```
+
+**@prp-validator Features**:
+
+- **Pareto 80-20 scoring**: 0-100 points (80 critical + 20 nice-to-have)
+- **Auto-improvement loop**: Fixes issues automatically (max 3 iterations)
+- **Safety**: Creates backups before modifications
+- **Pass threshold**: 80/100 minimum to proceed
+- **Based on**: Raasmus' PRP Framework (Context Engineering 101 video)
+
+**Why Validation Matters**:
+
+- **Research errors** → 1,000 lines of bad code (ROI 100x to fix early)
+- **Planning errors** → 10-100 lines of bad code (ROI 10-20x to fix early)
+- **Code errors** → 1 line of bad code (easy to fix)
+
+See `.claude/agents/prp-validator.md` for complete documentation (900+ lines)
+
 ### 💾 Memoria Persistente con Aprendizaje Continuo
+
 - ✅ Almacenamiento de decisiones arquitectónicas
 - ✅ Aprendizaje de patrones reutilizables
 - ✅ Contexto relevante para proyectos futuros
@@ -244,6 +320,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Decay de relevancia con el tiempo
 
 ### ✅ Validación de Calidad Multi-Nivel
+
 - ✅ **Human checkpoints** (2 critical validation points)
 - ✅ **TDD tests** (automated per-feature validation)
 - ✅ Linting automático con ruff
@@ -254,6 +331,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Recomendaciones de mejora
 
 ### 🛠️ Custom MCP Tools
+
 - ✅ create_project_structure: Scaffolding completo
 - ✅ generate_agent_definition: Creación de agentes
 - ✅ generate_documentation: README, PLANNING automáticos
@@ -280,6 +358,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 ### Milestones Completados
 
 **MILESTONE 5 (Tests de Integración Híbrida) - ✅ COMPLETADO**
+
 - ✅ E2E smoke test: 6 tests (complete workflow validation)
 - ✅ Checkpoint tests: 14 tests (CHECKPOINT 1 & 2 flows)
 - ✅ Hybrid architecture tests: 14 tests (memory, versioning, delegation)
@@ -290,6 +369,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Documentation: VALIDATION_M5.md (443 lines)
 
 **MILESTONE 4 (Sistema de Versionado) - ✅ COMPLETADO**
+
 - ✅ Dual versioning: Template v3.0.0 + SDK v1.0.0
 - ✅ CHANGELOG.md (180 lines, Keep a Changelog format)
 - ✅ MIGRATIONS.md (220 lines, migration guides)
@@ -300,6 +380,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Semantic versioning: MAJOR.MINOR.PATCH strategy
 
 **MILESTONE 3 (Templates Jinja2) - ✅ COMPLETADO**
+
 - ✅ 11 template files: base + medium + high complexity
 - ✅ Dynamic rendering: 26+ variables from AutomationIntent
 - ✅ Conditional logic: Projects adapt to complexity and APIs
@@ -308,6 +389,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ @project-initializer integration: Phase 8.1 updated
 
 **MILESTONE 2 IMPROVED (Context Engineering) - ✅ COMPLETADO**
+
 - ✅ @project-initializer: 1365 lines, 11 phases
 - ✅ TDD Approach: Tests FIRST workflow (5-step loop)
 - ✅ CHECKPOINT 1 (Research): ROI 100x validation
@@ -316,6 +398,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Validation: 4/4 tests PASS
 
 **ORCHESTRATOR SDK (Engine Layer) - ✅ OPERATIVO**
+
 - ✅ Core Orchestrator: AutomationIntent analysis
 - ✅ Pydantic v2 Models: Structured validation
 - ✅ Memory System: Shared `.claude/memories/`
@@ -324,6 +407,7 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Version tracking: v1.0.0 (semantic versioning)
 
 **MILESTONE 6 (Documentación Final del Sistema) - ✅ COMPLETADO**
+
 - ✅ QUICK_START.md: Template-specific onboarding (582 lines)
 - ✅ USER_GUIDE.md: Complete system guide (1,070 lines + 5 diagrams)
 - ✅ TROUBLESHOOTING.md: 30 common errors with solutions (680 lines)
@@ -336,7 +420,8 @@ El template utiliza una **arquitectura de dos capas** que combina lo mejor de am
 - ✅ Documentation: VALIDATION_M6.md (410 lines)
 
 **Estado Final: ✅ PRODUCTION READY (v3.1.0)**
-```
+
+````
 
 **Quality Metrics M2-IMPROVED:**
 - ✅ **Coherencia estructural**: 100% (1365 líneas, 0 errores)
@@ -378,9 +463,10 @@ pytest --cov=orchestrator --cov-report=term-missing tests/
 
 # Coverage con HTML report
 pytest --cov=orchestrator --cov-report=html tests/
-```
+````
 
 **Test Structure:**
+
 - `tests/unit/orchestrator/test_models.py` - Tests de modelos Pydantic
 - `tests/unit/orchestrator/test_memory.py` - Tests de MemoryManager
 - `tests/unit/orchestrator/test_tools.py` - Tests de custom tools
@@ -491,3 +577,4 @@ Este orchestrator es ideal para:
 **Versión:** 3.0.0 (M3 - Templates System)
 **Estado:** ✅ Production Ready with Jinja2 Templates + Context Engineering
 **Mejoras M3:** 11 Templates Jinja2 + Dynamic Rendering + 10/10 Validation PASS
+```

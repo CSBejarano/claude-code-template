@@ -1,258 +1,86 @@
-# Hooks - Claude Code
+# Hooks - Index
 
-Los **hooks** en Claude Code permiten ejecutar comandos shell automáticamente en respuesta a eventos específicos durante el desarrollo.
-
----
-
-## 📚 **Tipos de Hooks Disponibles**
-
-### **1. Pre-Tool-Use Hook**
-Se ejecuta **antes** de que Claude use una herramienta.
-
-**Ejemplo de uso:**
-- Validar permisos antes de operaciones críticas
-- Verificar estado del sistema
-- Hacer backups automáticos
-
-**Configuración en `settings.local.json`:**
-```json
-{
-  "hooks": {
-    "preToolUse": {
-      "enabled": true,
-      "command": "bash /path/to/pre-tool-use.sh"
-    }
-  }
-}
-```
+Quick index for Claude Code hooks system.
 
 ---
 
-### **2. User-Prompt-Submit Hook**
-Se ejecuta cuando el usuario envía un mensaje.
+## 📖 **Documentation**
 
-**Ejemplo de uso:**
-- Logging de interacciones
-- Validaciones antes de procesar
-- Actualizar contexto automáticamente
-
-**Configuración:**
-```json
-{
-  "hooks": {
-    "userPromptSubmit": {
-      "enabled": true,
-      "command": "bash /path/to/prompt-submit.sh"
-    }
-  }
-}
-```
+**Main Guide**: [HOOKS_GUIDE.md](HOOKS_GUIDE.md) - Complete hooks documentation
 
 ---
 
-### **3. Post-Tool-Use Hook**
-Se ejecuta **después** de que Claude usa una herramienta.
+## ⚡ **Active Hooks (4)**
 
-**Ejemplo de uso:**
-- Ejecutar tests automáticamente después de cambios
-- Actualizar documentación
-- Commit automático de cambios
+All hooks are PostToolUse (non-blocking):
 
-**Configuración:**
-```json
-{
-  "hooks": {
-    "postToolUse": {
-      "enabled": true,
-      "command": "bash /path/to/post-tool-use.sh"
-    }
-  }
-}
-```
+1. **log-tool-usage.sh** - Logs all operations
+   - **ROI**: Medium
+   - **Log**: `.claude/logs/tool-usage.log`
 
----
+2. **test-after-edit.sh** ⭐ - Auto-runs tests after edits
+   - **ROI**: **VERY HIGH**
+   - **Log**: `.claude/logs/test-results.log`
+   - **Requires**: `pytest`
 
-## 🔧 **Configuración de Hooks**
+3. **auto-format.sh** - Auto-formats code
+   - **ROI**: High
+   - **Log**: `.claude/logs/format.log`
+   - **Requires**: `black`/`prettier`
 
-### **Archivo de Configuración**
-Los hooks se configuran en `.claude/settings.local.json`:
-
-```json
-{
-  "hooks": {
-    "preToolUse": {
-      "enabled": true,
-      "command": "bash .claude/hooks/pre-tool-use.sh",
-      "blocking": true
-    },
-    "userPromptSubmit": {
-      "enabled": true,
-      "command": "bash .claude/hooks/prompt-submit.sh",
-      "blocking": false
-    },
-    "postToolUse": {
-      "enabled": true,
-      "command": "bash .claude/hooks/post-tool-use.sh",
-      "blocking": false
-    }
-  }
-}
-```
-
-### **Parámetros:**
-- `enabled`: Activa/desactiva el hook
-- `command`: Comando shell a ejecutar
-- `blocking`: Si `true`, bloquea la operación hasta completar
+4. **doc-update-reminder.sh** - Documentation reminders
+   - **ROI**: Medium
+   - **Log**: `.claude/logs/doc-reminders.log`
 
 ---
 
-## 📝 **Ejemplos de Scripts**
+## 🔧 **Quick Commands**
 
-### **Ejemplo: Pre-Tool-Use Validation**
 ```bash
-#!/bin/bash
-# .claude/hooks/pre-tool-use.sh
+# View all logs
+tail -f .claude/logs/*.log
 
-# Verificar que no hay cambios sin commit
-if [[ -n $(git status -s) ]]; then
-  echo "⚠️ Hay cambios sin commit"
-  echo "Considera hacer commit antes de continuar"
-fi
+# Test a hook manually
+bash .claude/hooks/test-after-edit.sh
 
-# Verificar tests
-if ! npm test --silent; then
-  echo "❌ Los tests están fallando"
-  exit 1  # Bloquear operación
-fi
+# Make hooks executable
+chmod +x .claude/hooks/*.sh
 
-exit 0  # Permitir operación
-```
-
-### **Ejemplo: Post-Tool-Use Auto-Format**
-```bash
-#!/bin/bash
-# .claude/hooks/post-tool-use.sh
-
-# Auto-format código modificado
-if [[ "$TOOL_NAME" == "Edit" ]] || [[ "$TOOL_NAME" == "Write" ]]; then
-  echo "🔧 Formateando código..."
-  npm run format
-fi
-
-exit 0
-```
-
-### **Ejemplo: User-Prompt Logging**
-```bash
-#!/bin/bash
-# .claude/hooks/prompt-submit.sh
-
-# Log de interacciones
-echo "[$(date)] User prompt submitted" >> .claude/interaction.log
-
-exit 0
+# View configuration
+cat .claude/settings.local.json
 ```
 
 ---
 
-## ⚠️ **Best Practices**
+## 📁 **Files in This Directory**
 
-### **1. Mantén los Hooks Rápidos**
-- Evita operaciones lentas que bloqueen el flujo
-- Usa `blocking: false` para hooks no críticos
-
-### **2. Manejo de Errores**
-```bash
-#!/bin/bash
-set -e  # Salir en error
-
-# Tu lógica aquí
-
-exit 0
 ```
-
-### **3. Logging**
-```bash
-# Crear log file
-LOG_FILE=".claude/hooks.log"
-echo "[$(date)] Hook executed" >> $LOG_FILE
-```
-
-### **4. Testing**
-Prueba tus hooks manualmente antes de activarlos:
-```bash
-bash .claude/hooks/pre-tool-use.sh
-echo $?  # Verificar exit code
+.claude/hooks/
+├── README.md                  # This file (index)
+├── HOOKS_GUIDE.md             # Complete documentation
+├── log-tool-usage.sh          # Hook 1: Operations logging
+├── test-after-edit.sh         # Hook 2: Auto-testing
+├── auto-format.sh             # Hook 3: Auto-formatting
+└── doc-update-reminder.sh     # Hook 4: Doc reminders
 ```
 
 ---
 
-## 🎯 **Casos de Uso Comunes**
+## 🚀 **Getting Started**
 
-### **1. Auto-Test Before Critical Operations**
-```json
-{
-  "preToolUse": {
-    "enabled": true,
-    "command": "npm test",
-    "blocking": true
-  }
-}
-```
-
-### **2. Auto-Commit After Changes**
-```json
-{
-  "postToolUse": {
-    "enabled": true,
-    "command": "git add -A && git commit -m 'Auto-commit by Claude'",
-    "blocking": false
-  }
-}
-```
-
-### **3. Backup Before Destructive Operations**
-```json
-{
-  "preToolUse": {
-    "enabled": true,
-    "command": ".claude/hooks/backup.sh",
-    "blocking": true
-  }
-}
-```
+1. **Read the guide**: [HOOKS_GUIDE.md](HOOKS_GUIDE.md)
+2. **Check configuration**: `.claude/settings.local.json`
+3. **View logs**: `.claude/logs/*.log`
+4. **Test hooks**: `bash .claude/hooks/[hook-name].sh`
 
 ---
 
-## 🚫 **Desactivar Hooks Temporalmente**
+## ⚠️ **Troubleshooting**
 
-Para desactivar todos los hooks temporalmente:
-
-```json
-{
-  "hooks": {
-    "preToolUse": {
-      "enabled": false
-    },
-    "postToolUse": {
-      "enabled": false
-    },
-    "userPromptSubmit": {
-      "enabled": false
-    }
-  }
-}
-```
-
-O elimina el archivo `settings.local.json`.
+See [HOOKS_GUIDE.md#troubleshooting](HOOKS_GUIDE.md#-troubleshooting) for common issues and solutions.
 
 ---
 
-## 📚 **Recursos Adicionales**
-
-- [Documentación Oficial de Claude Code](https://docs.claude.com)
-- [Ejemplos de Hooks](./examples/)
-
----
-
-*Última actualización: [FECHA]*
+**Status**: ✅ 4 hooks active
+**Total ROI**: HIGH
+**Version**: 3.1.0

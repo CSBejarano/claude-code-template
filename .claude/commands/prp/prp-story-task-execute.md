@@ -12,6 +12,43 @@ Ejecutar un story/task PRP mediante **completación secuencial de tareas** con v
 
 **Filosofía de Ejecución**: Completar una tarea, validarla, luego mover a la siguiente. Ninguna tarea queda atrás.
 
+## 🔍 PRE-EXECUTION: PRP Validation (MANDATORY)
+
+**CRITICAL**: Before executing this PRP, it MUST be validated by @prp-validator.
+
+### Automatic Validation Workflow
+
+1. **Invoke @prp-validator** with PRP file path
+2. **Validation Process**:
+   - @prp-validator scores PRP using Pareto 80-20 criteria (0-100 points)
+   - If score < 80/100: Auto-improvement loop (max 3 iterations)
+   - If score ≥ 80/100: Proceed to execution
+   - If stuck after 3 iterations: Request manual review
+
+3. **Validation Outputs**:
+   - ✅ PASS (score ≥ 80): Continue with execution below
+   - ⚠️ NEEDS REVIEW (score < 80 after 3 loops): Show issues to user, ask guidance
+   - Backup created: `PRPs/[filename].md.backup-[timestamp]`
+
+4. **User Override** (NOT recommended):
+   - If user explicitly requests, can skip validation
+   - Use command: `/prp-execute [file] --skip-validation`
+
+### What @prp-validator Checks
+
+**TIER 1 - CRITICAL (80 points)**:
+
+1. "Current vs Desired Structure" section exists (20 pts)
+2. References include BOTH external + internal (20 pts)
+3. Business logic is SPECIFIC, not vague (20 pts)
+4. Implementation steps are ACTIONABLE (20 pts)
+
+**TIER 2 - HIGH (20 points)**: 5. Validation gates mentioned (10 pts) 6. Clear constraints/gotchas (10 pts)
+
+**Minimum Score**: 80/100 to proceed
+
+---
+
 ## Proceso de Ejecución
 
 ### 1. Cargar Story PRP
@@ -44,8 +81,10 @@ Para cada tarea en el PRP:
 
 **b) Implementar Tarea**
 
+**Agent**: @code-executor (TDD specialist - writes tests FIRST, then implementation)
+
 - Seguir el patrón especificado de fases existentes
-- Usar convenciones de nomenclatura del Sistema (phase1_reception, async_, data_)
+- Usar convenciones de nomenclatura del Sistema (phase1*reception, async*, data\_)
 - Aplicar el enfoque documentado (Pydantic models, Redis cache)
 - Manejar casos edge mencionados (status "reception_completed", no "processing")
 

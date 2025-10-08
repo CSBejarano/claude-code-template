@@ -19,6 +19,70 @@ Pega a continuación la historia original compartida por el usuario:
 
 ---
 
+## 📁 PROJECT STRUCTURE ANALYSIS
+
+> **CRITICAL SECTION**: This shows WHAT will change in the codebase (enforced by @prp-validator)
+
+### Current Structure (Before Implementation)
+
+```
+proyecto/
+├── src/
+│   ├── index.js
+│   ├── services/
+│   │   └── existing_service.js
+│   └── utils/
+│       └── helper.js
+├── tests/
+│   └── existing.test.js
+└── package.json
+```
+
+### Desired Structure (After Implementation)
+
+```
+proyecto/
+├── src/
+│   ├── index.js
+│   ├── services/
+│   │   ├── existing_service.js
+│   │   └── new_service.js        # 🆕 NEW - Implements X functionality
+│   ├── utils/
+│   │   └── helper.js
+│   └── middleware/                # 🆕 NEW - Added for Y feature
+│       └── validator.js           # 🆕 NEW - Validates Z
+├── tests/
+│   ├── existing.test.js
+│   └── new_service.test.js        # 🆕 NEW - Tests for new service
+└── package.json                   # ✏️ MODIFIED - Add dependencies
+```
+
+### Changes Summary
+
+- **Added**:
+  - `src/services/new_service.js` - Core logic for [feature]
+  - `src/middleware/` directory - Validation layer
+  - `src/middleware/validator.js` - Request validation
+  - `tests/new_service.test.js` - Unit tests
+
+- **Modified**:
+  - `package.json` - Add dependencies: [list]
+  - `src/index.js` - Register new routes/middleware (if applicable)
+
+- **Removed**:
+  - None (or list deprecated files if any)
+
+### Why This Matters
+
+This structure comparison helps the AI understand:
+
+1. What files already exist (don't recreate them)
+2. What will be created (with clear purpose)
+3. What will be modified (and why)
+4. Where to place new code (following project conventions)
+
+---
+
 ## REFERENCIAS DE CONTEXTO
 
 [Documentación y patrones auto-descubiertos]

@@ -13,14 +13,17 @@
 Este comando opera en **dos modos diferentes** según el contexto:
 
 ### **Modo 1: Proyecto Nuevo (Integrado)**
+
 **Llamado automáticamente por `/init-project` en la Fase 0.7**
 
 **Cuándo**:
+
 - Durante creación de proyecto nuevo
 - DESPUÉS de análisis del objetivo
 - ANTES de crear estructura de archivos
 
 **Fuente de información**:
+
 - ✅ Objetivo del usuario
 - ✅ Tech stack determinado
 - ✅ Agentes planificados
@@ -28,6 +31,7 @@ Este comando opera en **dos modos diferentes** según el contexto:
 - ❌ NO analiza código (aún no existe)
 
 **Output**:
+
 - CLAUDE.md con misión específica
 - PLANNING.md con arquitectura planificada
 - README.md base
@@ -35,6 +39,7 @@ Este comando opera en **dos modos diferentes** según el contexto:
 - Documentación que GUÍA la implementación
 
 **Ejemplo**:
+
 ```bash
 # Usuario NO ejecuta este comando directamente
 # Es llamado internamente por /init-project
@@ -53,9 +58,11 @@ Este comando opera en **dos modos diferentes** según el contexto:
 ---
 
 ### **Modo 2: Proyecto Existente (Standalone/Mantenimiento)**
+
 **Ejecutado manualmente por el usuario**
 
 **Cuándo usar**:
+
 - ✅ Después de cambios significativos en el código
 - ✅ Cuando contexto de Claude parece desactualizado
 - ✅ Antes de crear nuevas features importantes
@@ -63,6 +70,7 @@ Este comando opera en **dos modos diferentes** según el contexto:
 - ✅ Cuando arquitectura ha evolucionado
 
 **Fuente de información**:
+
 - ✅ Código real en `src/`
 - ✅ Estructura de archivos existente
 - ✅ Agentes ya creados en `.claude/agents/`
@@ -70,6 +78,7 @@ Este comando opera en **dos modos diferentes** según el contexto:
 - ✅ Tests existentes
 
 **Output**:
+
 - Documentación ACTUALIZADA reflejando código real
 - Gaps identificados y corregidos
 - Redundancias eliminadas
@@ -77,6 +86,7 @@ Este comando opera en **dos modos diferentes** según el contexto:
 - Información obsoleta removida
 
 **Ejemplo**:
+
 ```bash
 # Usuario ejecuta directamente
 /update-context
@@ -128,6 +138,7 @@ SI es llamado desde /init-project:
 ### ⚠️ REGLAS OBLIGATORIAS
 
 #### 1. **SIEMPRE Usar Sequential Thinking**
+
 ```
 OBLIGATORIO al inicio:
 @mcp__server-sequential-thinking__sequentialthinking
@@ -141,6 +152,7 @@ Para analizar:
 ```
 
 #### 2. **Orquestación de Agentes**
+
 ```
 Este comando actúa como ORQUESTADOR:
 
@@ -150,6 +162,7 @@ Este comando actúa como ORQUESTADOR:
    - @sequential-thinking: Planificar actualizaciones
    - @documentation-manager: Generar/actualizar docs
    - @context-optimizer* (crear): Optimizar contexto para Claude
+   - @validation-gates: Validar código mencionado en docs (Mode 2 only)
 
 3️⃣ Coordinar trabajo paralelo
 4️⃣ Consolidar resultados
@@ -157,6 +170,7 @@ Este comando actúa como ORQUESTADOR:
 ```
 
 #### 3. **Interactividad Total**
+
 ```
 NUNCA actualizar archivos sin confirmación del usuario
 
@@ -427,7 +441,7 @@ SI edit:
 
 ### **Ejemplo Concreto - Actualizar CLAUDE.md:**
 
-```
+````
 "📄 Actualizando CLAUDE.md...
 
 [Delega a @context-optimizer]
@@ -493,37 +507,40 @@ CAMBIOS PRINCIPALES:
 
   # Crear PRP para feature
   /prp-create [feature-name]
-  ```
+````
 
 ~ ACTUALIZADO - Estructura del Proyecto (líneas 68-87):
 
-  Reflejada estructura real con agentes, hooks, PRPs
+Reflejada estructura real con agentes, hooks, PRPs
 
 ~ ACTUALIZADO - Variables de Entorno (líneas 119-131):
 
-  [Si existe .env.example, usar esas variables]
+[Si existe .env.example, usar esas variables]
 
 ════════════════════════════════════════════════════════
 
 Total de cambios:
-+ 4 secciones nuevas
-~ 3 secciones actualizadas
-- 0 secciones removidas
-≈ 150 líneas agregadas
+
+- 4 secciones nuevas
+  ~ 3 secciones actualizadas
+
+* 0 secciones removidas
+  ≈ 150 líneas agregadas
 
 ¿Aplicar estos cambios a CLAUDE.md? (yes/no/edit/ver-completo)"
 
 [ESPERAR]
 
 SI ver-completo:
-    [Mostrar archivo completo generado]
-    "¿Aplicar? (yes/no/edit)"
+[Mostrar archivo completo generado]
+"¿Aplicar? (yes/no/edit)"
 
 SI yes:
-    "✅ CLAUDE.md actualizado (líneas: 337 → 487)
+"✅ CLAUDE.md actualizado (líneas: 337 → 487)
 
     Siguiente: PLANNING.md
     ¿Continuar? (yes/pausa)"
+
 ```
 
 ---
@@ -531,6 +548,7 @@ SI yes:
 ### **Fase 5: Generación de Archivos Nuevos** ✨
 
 ```
+
 Para archivos que no existen:
 
 "📄 Creando PLANNING.md...
@@ -539,14 +557,14 @@ Para archivos que no existen:
 
 [PARALELO]
 ├──> @codebase-analyst
-│    └─> Analiza arquitectura del código
-│    └─> Identifica componentes y flujos
-│    └─> Extrae dependencias
+│ └─> Analiza arquitectura del código
+│ └─> Identifica componentes y flujos
+│ └─> Extrae dependencias
 │
 └──> @context-optimizer
-     └─> Estructura el documento
-     └─> Genera secciones apropiadas
-     └─> Optimiza para claridad
+└─> Estructura el documento
+└─> Genera secciones apropiadas
+└─> Optimiza para claridad
 
 ✅ PLANNING.md generado
 
@@ -555,17 +573,17 @@ Para archivos que no existen:
 PLANNING.md
 ├── 🎯 Visión del Proyecto
 ├── 🏗️ Arquitectura del Sistema
-│   ├── Diagrama de Componentes
-│   ├── Flujo de Datos
-│   └── Tecnologías Usadas
+│ ├── Diagrama de Componentes
+│ ├── Flujo de Datos
+│ └── Tecnologías Usadas
 ├── 🔧 Decisiones Técnicas
-│   ├── Por qué Python + Node.js
-│   ├── Por qué sistema de agentes
-│   └── Por qué PRPs
+│ ├── Por qué Python + Node.js
+│ ├── Por qué sistema de agentes
+│ └── Por qué PRPs
 ├── 📋 Roadmap
-│   ├── Fase actual
-│   ├── Próximos features
-│   └── Backlog
+│ ├── Fase actual
+│ ├── Próximos features
+│ └── Backlog
 ├── 🐛 Deuda Técnica
 └── 📊 Métricas y KPIs
 
@@ -576,15 +594,16 @@ Total: ~250 líneas
 [ESPERAR]
 
 SI yes:
-    [Mostrar contenido generado]
-    "¿Crear PLANNING.md con este contenido? (yes/no/edit)"
+[Mostrar contenido generado]
+"¿Crear PLANNING.md con este contenido? (yes/no/edit)"
 
 SI crear-directamente:
-    [Crear archivo]
-    "✅ PLANNING.md creado
+[Crear archivo]
+"✅ PLANNING.md creado
 
     Siguiente: QUICK_START.md
     ¿Continuar? (yes)"
+
 ```
 
 ---
@@ -592,6 +611,7 @@ SI crear-directamente:
 ### **Fase 6: Validación y Cross-Referencias** 🔗
 
 ```
+
 "🔗 Validando consistencia entre archivos...
 
 [Usa @context-optimizer]
@@ -605,31 +625,51 @@ Verificando:
 Análisis:
 
 ✅ CORRECTO:
-   - CLAUDE.md referencia correctamente a README.md
-   - QUICK_START.md link a setup completo OK
-   - Comandos consistentes en todos los archivos
+
+- CLAUDE.md referencia correctamente a README.md
+- QUICK_START.md link a setup completo OK
+- Comandos consistentes en todos los archivos
 
 ⚠️ ADVERTENCIAS:
-   - CLAUDE.md describe arquitectura brevemente
-   - PLANNING.md describe arquitectura en detalle
-   → Recomendación: CLAUDE.md link a PLANNING.md
+
+- CLAUDE.md describe arquitectura brevemente
+- PLANNING.md describe arquitectura en detalle
+  → Recomendación: CLAUDE.md link a PLANNING.md
 
 ❌ ERRORES:
-   - README.md menciona comando /setup que no existe
-   → Fix: Cambiar a /init-project
+
+- README.md menciona comando /setup que no existe
+  → Fix: Cambiar a /init-project
 
 Aplicar fixes automáticos? (yes/no/ver-detalles)"
 
 [ESPERAR]
 
 SI yes:
-    [Aplicar correcciones]
-    "✅ Correcciones aplicadas
+[Aplicar correcciones]
+"✅ Correcciones aplicadas
 
     - Fixed: README.md comando corregido
     - Added: Link CLAUDE.md → PLANNING.md
 
-    Validación completa ✅"
+🔍 Validación de Código (Mode 2 only)...
+
+[Usa @validation-gates si proyecto tiene código]
+
+Verificando:
+├─> Ejemplos de código en docs son válidos
+├─> Patrones documentados existen en codebase
+├─> Comandos mencionados son ejecutables
+└─> Tests pasan (si existen)
+
+✅ Código validado:
+
+- Todos los ejemplos son sintácticamente correctos
+- Patrones documentados están implementados
+- Comandos en docs funcionan
+
+  Validación completa ✅"
+
 ```
 
 ---
@@ -637,6 +677,7 @@ SI yes:
 ### **Fase 7: Generación de Índice de Documentación** 📚
 
 ```
+
 "📚 Creando índice de documentación...
 
 [Genera .claude/DOCUMENTATION_INDEX.md]
@@ -646,32 +687,38 @@ Contenido:
 # 📚 Índice de Documentación del Proyecto
 
 ## 🚀 Para Empezar
+
 - [QUICK_START.md](../QUICK_START.md) - Setup en 10 minutos
 - [README.md](../README.md) - Documentación principal
 
 ## 🧠 Para Claude Code
+
 - [CLAUDE.md](../CLAUDE.md) - Contexto completo del proyecto
 - [.claude/PLANNING.md](PLANNING.md) - Arquitectura y decisiones
 - [.claude/TASK.md](TASK.md) - Tareas actuales
 
 ## 🤖 Sistema de Agentes
+
 - [.claude/AGENTS.md](AGENTS.md) - Agentes disponibles
 - [.claude/agents/](agents/) - Definiciones de agentes
 - [.claude/INTERACTIVE_APPROACH.md](../PRPs/INTERACTIVE_APPROACH.md)
 
 ## ⚡ Comandos y PRPs
+
 - [.claude/commands/](commands/) - Comandos personalizados
   - [init-project.md](commands/init-project.md)
   - [update-context.md](commands/update-context.md)
 - [PRPs/templates/](../PRPs/templates/) - Templates PRP
 
 ## 🔧 Configuración
+
 - [.claude/hooks/](hooks/) - Hooks de eventos
 - [.claude/MCP_TOOLS.md](MCP_TOOLS.md) - Herramientas MCP
 
 ✅ Índice creado
 
 Guardar como .claude/DOCUMENTATION_INDEX.md? (yes/no)"
+
 ```
 
 ---
@@ -679,52 +726,62 @@ Guardar como .claude/DOCUMENTATION_INDEX.md? (yes/no)"
 ### **Fase 8: Resumen Final** 🎉
 
 ```
+
 "🎉 Actualización de contexto completada!
 
 📊 RESUMEN DE CAMBIOS:
 
 Archivos actualizados:
 ✅ CLAUDE.md (337 → 487 líneas) +150 líneas
-   - Agregada misión específica
-   - Actualizados agentes y comandos
-   - Optimizado para Claude
+
+- Agregada misión específica
+- Actualizados agentes y comandos
+- Optimizado para Claude
 
 ✅ README.md (245 → 280 líneas) +35 líneas
-   - Actualizado quick start
-   - Corregidos comandos
-   - Agregados ejemplos
+
+- Actualizado quick start
+- Corregidos comandos
+- Agregados ejemplos
 
 Archivos creados:
 ✨ PLANNING.md (250 líneas)
-   - Arquitectura completa
-   - Decisiones técnicas
-   - Roadmap
+
+- Arquitectura completa
+- Decisiones técnicas
+- Roadmap
 
 ✨ QUICK_START.md (95 líneas)
-   - Setup en 10 minutos
-   - Comandos exactos
+
+- Setup en 10 minutos
+- Comandos exactos
 
 ✨ .claude/AGENTS.md (180 líneas)
-   - Documentación de agentes
-   - Cuándo usar cada uno
+
+- Documentación de agentes
+- Cuándo usar cada uno
 
 ✨ .claude/DOCUMENTATION_INDEX.md (75 líneas)
-   - Índice navegable
+
+- Índice navegable
 
 Agentes creados:
 🤖 @context-optimizer
-   - Especialista en optimizar contexto
-   - Guardado en .claude/agents/context-optimizer.md
+
+- Especialista en optimizar contexto
+- Guardado en .claude/agents/context-optimizer.md
 
 MEJORAS DE CONTEXTO:
 
 Antes:
+
 - 📊 Completitud: 60%
 - 🔗 Cross-refs: 30%
 - ⚠️ Inconsistencias: 5
 - 📄 Archivos: 8
 
 Después:
+
 - 📊 Completitud: 95% (+35%)
 - 🔗 Cross-refs: 90% (+60%)
 - ⚠️ Inconsistencias: 0 (-5)
@@ -761,13 +818,14 @@ PRÓXIMOS PASOS:
 [ESPERAR]
 
 SI todo-ok:
-    "✅ ¡Perfecto! Tu proyecto ahora tiene contexto optimizado.
+"✅ ¡Perfecto! Tu proyecto ahora tiene contexto optimizado.
 
     Puedes ejecutar:
     - /init-project para crear nuevo proyecto
     - /prp-create para agregar features
 
     Los archivos actualizados maximizarán la efectividad de Claude."
+
 ```
 
 ---
@@ -777,6 +835,7 @@ SI todo-ok:
 ### ❌ NUNCA hagas esto:
 
 ```
+
 ❌ Actualizar archivos sin mostrar cambios primero
 ❌ Sobrescribir sin backup
 ❌ Generar documentación genérica (plantillas sin contenido real)
@@ -786,11 +845,13 @@ SI todo-ok:
 ❌ Copiar descripciones sin analizar código real
 ❌ No usar agentes especializados
 ❌ Hacer todo secuencialmente en lugar de paralelo
+
 ```
 
 ### ✅ SIEMPRE haz esto:
 
 ```
+
 ✅ Analizar código real antes de documentar
 ✅ Mostrar preview de cambios antes de aplicar
 ✅ Pedir confirmación en cada archivo
@@ -801,6 +862,7 @@ SI todo-ok:
 ✅ Optimizar para claridad y utilidad
 ✅ Documentar decisiones técnicas con razones
 ✅ Incluir ejemplos reales del proyecto
+
 ```
 
 ---
@@ -905,3 +967,4 @@ Un buen update-context logra:
 ---
 
 **🎯 Objetivo: Maximizar la efectividad de Claude Code con contexto perfecto**
+```

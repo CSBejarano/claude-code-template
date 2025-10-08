@@ -42,7 +42,7 @@ El comando ejecutará los siguientes pasos automáticamente:
    - Problemas encontrados y soluciones
    - Estado actual de la tarea
 
-2. **Genera archivo de continuación**:
+2. **Genera y/o actualiza archivo de continuación**:
    - `.claude/CONTINUE_SESSION.md`
    - Formato optimizado para que otro agente pueda continuar
    - Incluye paths exactos, números de línea, comandos ejecutados
@@ -53,11 +53,11 @@ El comando ejecutará los siguientes pasos automáticamente:
    - Prompt exacto para nueva sesión
    - Checklist de verificación
 
-### Paso 2: Usuario Ejecuta `/clear` (Manual)
+### Paso 2: Usuario Ejecuta `/clear` (Automatico)
 
-⚠️ **IMPORTANTE**: El comando NO ejecuta `/clear` automáticamente.
+⚠️ **IMPORTANTE**: El comando SI ejecuta `/clear` automáticamente.
 
-**Razón**: Quieres revisar el archivo de continuación antes de limpiar el contexto.
+**Razón**: Quieres que el contexto sea limpio para continuar en una nueva sesión.
 
 ### Paso 3: Nueva Sesión Continúa
 
@@ -78,49 +78,59 @@ El archivo `.claude/CONTINUE_SESSION.md` generado contendrá:
 # Continuación de Sesión - [Fecha]
 
 ## 🎯 Objetivo de la Tarea
+
 [Descripción clara del objetivo original]
 
 ## ✅ Progreso Completado
 
 ### Fase 1: Research (si aplica)
+
 - Archivos investigados: [lista con paths]
 - Hallazgos clave: [resumen]
 - Flujo de información identificado: [diagrama o descripción]
 
 ### Fase 2: Planning (si aplica)
+
 - Plan creado: [link o resumen]
 - Fases definidas: [lista]
 - Tests planificados: [lista]
 
 ### Fase 3: Implementation (si aplica)
+
 - Archivos modificados: [lista con números de línea]
 - Tests creados: [lista]
 - Comandos ejecutados: [lista]
 
 ## 🔍 Decisiones Arquitectónicas
+
 1. [Decisión 1]: [Razón]
 2. [Decisión 2]: [Razón]
 
 ## 🐛 Problemas Encontrados y Soluciones
+
 1. **Problema**: [Descripción]
    **Solución**: [Qué funcionó]
 
 ## 📍 Estado Actual
+
 - **Context window**: [porcentaje antes de compactar]
 - **Último paso completado**: [descripción]
 - **Archivos en progreso**: [lista]
 
 ## ⏭️ Próximos Pasos (En Orden)
+
 1. [ ] [Paso específico con path:línea si aplica]
 2. [ ] [Paso específico]
 3. [ ] [Paso específico]
 
 ## 📝 Notas Importantes
+
 - [Cualquier cosa crítica que el próximo agente DEBE saber]
 - [Trampas o gotchas identificados]
 - [Comandos que NO funcionaron y por qué]
 
 ## 🔗 Referencias
+
 - Archivos clave: [lista con paths]
 - Documentación relevante: [links]
 - Tests relacionados: [paths]
@@ -171,6 +181,7 @@ Compacta finalizando una fase y preparando para la siguiente.
 ### 2. **Organiza por Leverage**
 
 Ordena la información por impacto:
+
 - Decisiones arquitectónicas primero (mayor leverage)
 - Hallazgos de research segundo
 - Detalles de implementación tercero
@@ -183,7 +194,7 @@ Ordena la información por impacto:
 
 ❌ MAL: "Encontré un bug"
 ✅ BIEN: "Bug en auth.ts:123 - no valida tokens expirados.
-         Solución: agregamos check antes de jwt.verify()"
+Solución: agregamos check antes de jwt.verify()"
 ```
 
 ### 4. **Próximos Pasos Ejecutables**
@@ -191,6 +202,7 @@ Ordena la información por impacto:
 ```markdown
 ❌ MAL: "Continuar con la implementación"
 ✅ BIEN:
+
 1. [ ] Implementar validate_email() en src/utils/validators.py
 2. [ ] Agregar test en tests/unit/test_validators.py
 3. [ ] Ejecutar: pytest tests/unit/test_validators.py
@@ -253,12 +265,20 @@ Este comando ejecutará internamente:
    - Estructura según template
    - Incluye timestamps y versiones
 
-3. **Verificación**:
+3. **Validación (NUEVO)**:
+   - **@validation-gates**: Valida completitud del archivo compactado
+   - Verifica que toda la información crítica está presente
+   - Confirma que el formato es correcto y legible
    - Muestra resumen de lo compactado
    - Reporta tamaño del archivo generado
    - Sugiere qué revisar manualmente
 
-4. **Instrucciones de continuación**:
+4. **Actualización de documentación (NUEVO)**:
+   - **@documentation-manager**: Actualiza referencias en documentación
+   - Si el archivo CONTINUE_SESSION.md referencia nuevos patrones o decisiones
+   - Asegura consistencia con PLANNING.md y TASK.md
+
+5. **Instrucciones de continuación**:
    - Muestra prompt exacto para nueva sesión
    - Recuerda ejecutar /clear
    - Checklist de verificación
@@ -286,6 +306,7 @@ Edita `.claude/templates/CONTINUE_SESSION_TEMPLATE.md` para personalizar la estr
 ### Auto-backup
 
 Por defecto, se crean backups:
+
 - `.claude/session_backups/CONTINUE_SESSION_[timestamp].md`
 - Últimos 5 backups preservados
 
